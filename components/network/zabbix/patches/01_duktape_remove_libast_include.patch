@@ -1,0 +1,19 @@
+--- zabbix-4.2.2/src/libs/zbxembed/duk_config.h.bak	2019-09-15 20:04:55.138007999 +0000
++++ zabbix-4.2.2/src/libs/zbxembed/duk_config.h	2019-09-15 20:06:07.161714614 +0000
+@@ -708,16 +708,6 @@
+ #define DUK_USE_DATE_FMT_STRFTIME
+ 
+ #include <sys/types.h>
+-#if defined(DUK_F_OLD_SOLARIS)
+-/* Old Solaris with no endian.h, stdint.h */
+-#define DUK_F_NO_STDINT_H
+-#if !defined(DUK_USE_BYTEORDER)
+-#define DUK_USE_BYTEORDER 3
+-#endif
+-#else  /* DUK_F_OLD_SOLARIS */
+-#include <ast/endian.h>
+-#endif  /* DUK_F_OLD_SOLARIS */
+-
+ #include <sys/param.h>
+ #include <sys/time.h>
+ #include <time.h>
