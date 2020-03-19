@@ -1,0 +1,11 @@
+patches for consideration
+
+pkgsrc:
+patches/patch-browser_app_profile_firefox.js
+
+
+# This check does not work for illumos. Hack it out of existence.
+        if host_or_target.alias is not "x86_64-pc-solaris2.11":
+            return "x86_64-sun-solaris"
+
+cargo install cbindgen

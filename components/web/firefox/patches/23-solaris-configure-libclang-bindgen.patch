@@ -1,0 +1,11 @@
+Fix the broken bindgen libclang version check (Our development tools take care to ensure proper versions)
+--- firefox-68.6.0/build/moz.configure/bindgen.configure.orig   2020-03-19 16:12:45.199808228 +0000
++++ firefox-68.6.0/build/moz.configure/bindgen.configure        2020-03-19 16:13:04.310862624 +0000
+@@ -276,6 +276,7 @@
+ @imports(_from='ctypes', _import='CDLL')
+ @imports(_from='textwrap', _import='dedent')
+ def min_libclang_version(libclang):
++    return True
+     try:
+         lib = CDLL(libclang.encode('utf-8'))
+         # We want at least 4.0. The API we test below is enough for that.

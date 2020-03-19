@@ -1,0 +1,53 @@
+Mozilla rustc check does not support crossbuild: let's remove it
+Remove calls to unwrap_rustup, they fail if rustup isn't present
+
+--- firefox-68.6.0/build/moz.configure/rust.configure.orig      2020-03-19 15:51:57.343492001 +0000
++++ firefox-68.6.0/build/moz.configure/rust.configure   2020-03-19 15:54:48.318909575 +0000
+@@ -79,9 +79,6 @@
+ 
+     return unwrap
+ 
+-rustc = unwrap_rustup(rustc, 'rustc')
+-cargo = unwrap_rustup(cargo, 'cargo')
+-
+ 
+ set_config('CARGO', cargo)
+ set_config('RUSTC', rustc)
+@@ -276,6 +273,10 @@
+             if rustc_target:
+                 break
+ 
++        # This check does not work for illumos. Hack it out of existence.
++        if host_or_target.alias is not "x86_64-pc-solaris2.11":
++            return "x86_64-sun-solaris"
++
+         if rustc_target is None:
+             die("Don't know how to translate {} for rustc".format(
+                 host_or_target.alias))
+@@ -295,25 +296,7 @@
+             os.write(in_fd, source)
+             os.close(in_fd)
+ 
+-            cmd = [
+-                rustc,
+-                '--crate-type', 'staticlib',
+-                target_arg,
+-                '-o', out_path,
+-                in_path,
+-            ]
+-
+-            def failed():
+-                die(dedent('''\
+-                Cannot compile for {} with {}
+-                The target may be unsupported, or you may not have
+-                a rust std library for that target installed. Try:
+-
+-                  rustup target add {}
+-                '''.format(host_or_target.alias, rustc, rustc_target.alias)))
+-            check_cmd_output(*cmd, onerror=failed)
+-            if not os.path.exists(out_path) or os.path.getsize(out_path) == 0:
+-                failed()
++
+         finally:
+             os.remove(in_path)
+             os.remove(out_path)

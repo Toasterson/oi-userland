@@ -1,0 +1,21 @@
+# HG changeset patch
+# User Petr Sumbera <petr.sumbera@oracle.com>
+# Date 1558941569 -7200
+#      Mon May 27 09:19:29 2019 +0200
+# Node ID de643f9832678e450d2f29c40f2c1a1f10a58cbf
+# Parent  d58d61a74f6e1381d49487b9df022c0d493f5a26
+Bug 1554582 - Solaris SPARC packaging should include libfreebl_64fpu_3.so and libfreebl_64int_3.so
+
+diff -r d58d61a74f6e -r de643f983267 browser/installer/package-manifest.in
+--- a/browser/installer/package-manifest.in	Fri May 10 13:33:40 2019 +0200
++++ b/browser/installer/package-manifest.in	Mon May 27 09:19:29 2019 +0200
+@@ -356,6 +356,9 @@
+ #ifndef MOZ_SYSTEM_NSS
+ #if defined(XP_LINUX) && !defined(ANDROID)
+ @BINPATH@/@DLL_PREFIX@freeblpriv3@DLL_SUFFIX@
++#elif defined(XP_SOLARIS) && defined(SPARC64)
++bin/libfreebl_64fpu_3.so
++bin/libfreebl_64int_3.so
+ #else
+ @BINPATH@/@DLL_PREFIX@freebl3@DLL_SUFFIX@
+ #endif
