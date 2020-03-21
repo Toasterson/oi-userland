@@ -9,3 +9,5 @@ patches/patch-browser_app_profile_firefox.js
             return "x86_64-sun-solaris"
 
 cargo install cbindgen
+
+#define __STDC_HOSTED__ 1

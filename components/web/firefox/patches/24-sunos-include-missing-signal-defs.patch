@@ -1,0 +1,11 @@
+Include sys/regset.h for WasmSignalHandlers as it is not found otherwise
+--- firefox-68.6.0/js/src/wasm/WasmSignalHandlers.cpp.orig      2020-03-19 22:53:45.577402027 +0000
++++ firefox-68.6.0/js/src/wasm/WasmSignalHandlers.cpp   2020-03-19 22:53:16.349533586 +0000
+@@ -26,6 +26,7 @@
+ #include "vm/Realm.h"
+ #include "vm/Runtime.h"
+ #include "wasm/WasmInstance.h"
++#include <sys/regset.h>
+ 
+ #if defined(XP_WIN)
+ #  include <winternl.h>  // must include before util/Windows.h's `#undef`s
