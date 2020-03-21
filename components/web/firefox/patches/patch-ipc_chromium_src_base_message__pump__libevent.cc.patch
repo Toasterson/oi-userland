@@ -2,8 +2,8 @@ $NetBSD: patch-ipc_chromium_src_base_message__pump__libevent.cc,v 1.1 2019/09/21
 
 Allow older libevent
 
---- ipc/chromium/src/base/message_pump_libevent.cc.orig	2019-03-07 16:53:35.000000000 +0000
-+++ ipc/chromium/src/base/message_pump_libevent.cc
+--- a/ipc/chromium/src/base/message_pump_libevent.cc.orig	2019-03-07 16:53:35.000000000 +0000
++++ b/ipc/chromium/src/base/message_pump_libevent.cc
 @@ -22,6 +22,7 @@
  
  // This macro checks that the _EVENT_SIZEOF_* constants defined in

@@ -1,7 +1,7 @@
 $NetBSD: patch-ipc_glue_CrossProcessSemaphore__posix.cpp,v 1.1 2019/09/21 07:31:44 ryoon Exp $
 
---- ipc/glue/CrossProcessSemaphore_posix.cpp.orig	2019-01-18 00:20:30.000000000 +0000
-+++ ipc/glue/CrossProcessSemaphore_posix.cpp
+--- a/ipc/glue/CrossProcessSemaphore_posix.cpp.orig	2019-01-18 00:20:30.000000000 +0000
++++ b/ipc/glue/CrossProcessSemaphore_posix.cpp
 @@ -9,6 +9,11 @@
  #include "nsDebug.h"
  #include "nsISupportsImpl.h"

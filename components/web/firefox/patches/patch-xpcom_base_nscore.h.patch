@@ -2,8 +2,8 @@ $NetBSD: patch-xpcom_base_nscore.h,v 1.1 2019/09/21 07:31:44 ryoon Exp $
 
 * Support llvm/clang
 
---- xpcom/base/nscore.h.orig	2019-03-07 16:53:44.000000000 +0000
-+++ xpcom/base/nscore.h
+--- a/xpcom/base/nscore.h.orig	2019-03-07 16:53:44.000000000 +0000
++++ b/xpcom/base/nscore.h
 @@ -76,7 +76,7 @@
   *           NS_HIDDEN_(int) NS_FASTCALL func2(char *foo);
   */

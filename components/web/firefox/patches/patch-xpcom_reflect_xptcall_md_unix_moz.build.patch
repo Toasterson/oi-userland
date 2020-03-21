@@ -2,8 +2,8 @@ $NetBSD: patch-xpcom_reflect_xptcall_md_unix_moz.build,v 1.1 2019/09/21 07:31:44
 
 Make NetBSD/sparc64 use the same xptcall bindings as all other sparc64 ports
 
---- xpcom/reflect/xptcall/md/unix/moz.build.orig	2019-07-06 01:49:01.000000000 +0000
-+++ xpcom/reflect/xptcall/md/unix/moz.build
+--- a/xpcom/reflect/xptcall/md/unix/moz.build.orig	2019-07-06 01:49:01.000000000 +0000
++++ b/xpcom/reflect/xptcall/md/unix/moz.build
 @@ -217,7 +217,7 @@ if CONFIG['OS_ARCH'] == 'OpenBSD' and CO
          'xptcstubs_sparc_openbsd.cpp',
      ]

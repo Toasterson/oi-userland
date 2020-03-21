@@ -2,8 +2,8 @@ $NetBSD: patch-toolkit_mozapps_installer_packager.mk,v 1.1 2019/09/21 07:31:44 r
 
 * Symbolic link to lib/firefox/firefox causes 'Couldn't load XPCOM.' error.
 
---- toolkit/mozapps/installer/packager.mk.orig	2018-06-21 20:04:02.000000000 +0000
-+++ toolkit/mozapps/installer/packager.mk
+--- a/toolkit/mozapps/installer/packager.mk.orig	2018-06-21 20:04:02.000000000 +0000
++++ b/toolkit/mozapps/installer/packager.mk
 @@ -123,7 +123,7 @@ endif
  	  (cd $(DESTDIR)$(installdir) && tar -xf -)
  	$(NSINSTALL) -D $(DESTDIR)$(bindir)

@@ -2,8 +2,8 @@ $NetBSD: patch-nsprpub_pr_src_pthreads_ptsynch.c,v 1.1 2020/02/08 22:06:38 kamil
 
 Workaround buggy usage of pthread_equal().
 
---- nsprpub/pr/src/pthreads/ptsynch.c.orig	2020-01-17 19:27:05.000000000 +0000
-+++ nsprpub/pr/src/pthreads/ptsynch.c
+--- a/nsprpub/pr/src/pthreads/ptsynch.c.orig	2020-01-17 19:27:05.000000000 +0000
++++ b/nsprpub/pr/src/pthreads/ptsynch.c
 @@ -25,6 +25,13 @@ static pthread_condattr_t _pt_cvar_attr;
  extern PTDebug pt_debug;  /* this is shared between several modules */
  #endif  /* defined(DEBUG) */

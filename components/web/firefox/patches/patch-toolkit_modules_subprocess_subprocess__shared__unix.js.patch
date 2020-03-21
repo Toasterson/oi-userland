@@ -5,8 +5,8 @@ https://bugzilla.mozilla.org/show_bug.cgi?id=1543602
 
 Please remove this patch when the upstream issue is resolved.
 
---- toolkit/modules/subprocess/subprocess_shared_unix.js.orig	2019-07-06 01:49:01.000000000 +0000
-+++ toolkit/modules/subprocess/subprocess_shared_unix.js
+--- a/toolkit/modules/subprocess/subprocess_shared_unix.js.orig	2019-07-06 01:49:01.000000000 +0000
++++ b/toolkit/modules/subprocess/subprocess_shared_unix.js
 @@ -12,7 +12,15 @@
  
  const LIBC = OS.Constants.libc;

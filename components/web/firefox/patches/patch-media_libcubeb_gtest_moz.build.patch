@@ -1,7 +1,7 @@
 $NetBSD: patch-media_libcubeb_gtest_moz.build,v 1.1 2019/09/21 07:31:44 ryoon Exp $
 
---- media/libcubeb/gtest/moz.build.orig	2018-10-18 20:06:09.000000000 +0000
-+++ media/libcubeb/gtest/moz.build
+--- a/media/libcubeb/gtest/moz.build.orig	2018-10-18 20:06:09.000000000 +0000
++++ b/media/libcubeb/gtest/moz.build
 @@ -72,7 +72,6 @@ elif CONFIG['OS_TARGET'] == 'OpenBSD':
          'sndio',
      ]

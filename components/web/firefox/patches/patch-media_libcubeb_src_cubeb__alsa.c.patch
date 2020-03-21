@@ -3,8 +3,8 @@ $NetBSD: patch-media_libcubeb_src_cubeb__alsa.c,v 1.1 2019/09/21 07:31:44 ryoon 
 * Support alsa audio under NetBSD
 * Avoid https://github.com/kinetiknz/cubeb/issues/226
 
---- media/libcubeb/src/cubeb_alsa.c.orig	2018-10-18 20:06:09.000000000 +0000
-+++ media/libcubeb/src/cubeb_alsa.c
+--- a/media/libcubeb/src/cubeb_alsa.c.orig	2018-10-18 20:06:09.000000000 +0000
++++ b/media/libcubeb/src/cubeb_alsa.c
 @@ -7,11 +7,13 @@
  #undef NDEBUG
  #define _DEFAULT_SOURCE

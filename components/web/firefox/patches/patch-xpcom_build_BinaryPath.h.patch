@@ -2,8 +2,8 @@ $NetBSD: patch-xpcom_build_BinaryPath.h,v 1.1 2019/09/21 07:31:44 ryoon Exp $
 
 * Fix build under netbsd-7, PR pkg/52956
 
---- xpcom/build/BinaryPath.h.orig	2019-03-07 16:53:45.000000000 +0000
-+++ xpcom/build/BinaryPath.h
+--- a/xpcom/build/BinaryPath.h.orig	2019-03-07 16:53:45.000000000 +0000
++++ b/xpcom/build/BinaryPath.h
 @@ -21,7 +21,8 @@
      defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__)
  #  include <sys/sysctl.h>

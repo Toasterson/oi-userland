@@ -15,6 +15,7 @@
 # Copyright 2013-2017 Alexander Pyhalov
 # Copyright 2019 Geoffrey Weiss
 # Copyright 2019 Michal Nowak
+# Copyright 2020 Till Wegmüller
 #
 
 BUILD_BITS = 64
@@ -106,6 +107,13 @@ COMPONENT_PRE_CONFIGURE_ACTION += \
 	echo "ac_add_options --with-system-zlib" >> $(MOZCONFIG) ; \
 
 CXXFLAGS += -Wno-invalid-offsetof -fpermissive
+CXXFLAGS += -D__HAVE_INLINE___ISINF
+CXXFLAGS += -mstackrealign
+CXXFLAGS += -D__STDC_HOSTED=0
+
+CFLAGS += -D_GLIBCXX_INCLUDE_NEXT_C_HEADERS
+CFLAGS += -D_POSIX_PTHREAD_SEMANTICS
+CFLAGS += -D__STDC_HOSTED=0
 
 LD_SECEXT_OPTIONS += $(SSBD_ENABLE)
 
@@ -154,6 +162,8 @@ $(LANG_FILES):
 	$(FETCH) --file $@  --url $(LANG_FILES_LOCATION)/$@
 
 download prep:: $(LANG_FILES)
+
+COMPONENT_PRE_CONFIGURE_ACTION += (cp files/cubeb_sun.c $(SOURCE_DIR)/media/libcubeb/src/cubeb_sun.c)
 
 COMPONENT_POST_BUILD_ACTION = \
 	(cd $(@D)/browser/installer ; $(ENV) $(COMPONENT_BUILD_ENV) \
