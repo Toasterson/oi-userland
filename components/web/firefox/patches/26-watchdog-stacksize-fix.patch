@@ -1,0 +1,11 @@
+-- js/xpconnect/src/XPCJSContext.cpp.orig        2020-03-27 12:59:02.354210601 +0000
++++ firefox-68.6.0/js/xpconnect/src/XPCJSContext.cpp    2020-03-27 12:59:17.374700280 +0000
+@@ -89,7 +89,7 @@
+ #if !defined(PTHREAD_STACK_MIN)
+ #  define PTHREAD_STACK_MIN 0
+ #endif
+-static constexpr size_t kWatchdogStackSize =
++static size_t kWatchdogStackSize =
+     PTHREAD_STACK_MIN < 32 * 1024 ? 32 * 1024 : PTHREAD_STACK_MIN;
+ 
+ static void WatchdogMain(void* arg);
