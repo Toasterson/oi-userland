@@ -1,17 +1,18 @@
---- rustc-1.40.0-src/src/bootstrap/builder.rs.~1~	2020-01-31 21:34:25.887052554 +0000
-+++ rustc-1.40.0-src/src/bootstrap/builder.rs	2020-01-31 21:37:09.700151078 +0000
-@@ -466,7 +466,6 @@
-                 install::Clippy,
-                 install::Miri,
-                 install::Analysis,
--                install::Src,
-                 install::Rustc
-             ),
+--- rustc-1.44.0-src/src/bootstrap/builder.rs.orig      2020-06-10 14:31:51.555018081 +0000
++++ rustc-1.44.0-src/src/bootstrap/builder.rs   2020-06-10 14:32:16.196948786 +0000
+@@ -866,8 +866,6 @@
+             rustflags.arg("-Zforce-unstable-if-unmarked");
          }
-@@ -994,7 +993,7 @@
-                       !target.contains("wasm32") &&
-                       !target.contains("emscripten") &&
-                       !target.contains("fuchsia") {
+ 
+-        rustflags.arg("-Zmacro-backtrace");
+-
+         let want_rustdoc = self.doc_tests != DocTests::No;
+ 
+         // We synthetically interpret a stage0 compiler used to build tools as a
+@@ -956,7 +954,7 @@
+                 rustflags.arg("-Zosx-rpath-install-name");
+                 Some("-Wl,-rpath,@loader_path/../lib")
+             } else if !target.contains("windows") {
 -                Some("-Wl,-rpath,$ORIGIN/../lib")
 +                Some("-Wl,-rpath,/usr/clang/9.0/lib")
              } else {
