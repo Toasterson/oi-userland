@@ -1,0 +1,17 @@
+$NetBSD: patch-src_libstd_build.rs,v 1.3 2019/01/19 12:44:08 ryoon Exp $
+
+SunOS support:
+ - Support PKGSRC_USE_SSP (ugly for now).
+
+Updated for rust 1.44
+
+--- rustc-1.44.0-src/src/libstd/build.rs.orig   2020-06-10 10:31:47.473295427 +0000
++++ rustc-1.44.0-src/src/libstd/build.rs        2020-06-10 10:32:24.048942068 +0000
+@@ -32,6 +32,7 @@
+         println!("cargo:rustc-link-lib=pthread");
+         println!("cargo:rustc-link-lib=resolv");
+         println!("cargo:rustc-link-lib=nsl");
++        println!("cargo:rustc-link-lib=ssp");
+         // Use libumem for the (malloc-compatible) allocator
+         println!("cargo:rustc-link-lib=umem");
+     } else if target.contains("apple-darwin") {
