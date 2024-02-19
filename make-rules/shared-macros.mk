@@ -1489,4 +1489,4 @@ $(QUILT):
 
 include $(WS_MAKE_RULES)/environment.mk
 include $(WS_MAKE_RULES)/depend.mk
-include $(WS_MAKE_RULES)/component.mk 
+include $(WS_MAKE_RULES)/component.mk

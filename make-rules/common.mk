@@ -236,3 +236,5 @@ endif
 ifneq ($(strip $(CLANG_VERSION)),$(CLANG_DEFAULT))
 USERLAND_REQUIRED_PACKAGES += developer/clang-$(CLANG_VERSION)
 endif
+
+include $(WS_MAKE_RULES)/repology.mk

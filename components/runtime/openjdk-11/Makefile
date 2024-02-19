@@ -24,6 +24,7 @@ OPENJDK_UPDATE=	0
 OPENJDK_BUILD=	22
 COMPONENT_NAME=		openjdk
 COMPONENT_VERSION=	$(OPENJDK_VERSION).$(OPENJDK_UPDATE).$(OPENJDK_BUILD)
+COMPONENT_REVISION= 1
 COMPONENT_FMRI=	runtime/java/$(COMPONENT_NAME)$(OPENJDK_VERSION)
 COMPONENT_SUMMARY=	Open-source implementation of the Java Platform, Standard Edition
 COMPONENT_SRC=	jdk$(OPENJDK_VERSION)u-jdk-$(COMPONENT_VERSION)-ga
@@ -76,6 +77,7 @@ CONFIGURE_OPTIONS+=        --with-native-debug-symbols=none
 CONFIGURE_OPTIONS+=        --with-jvm-variants=server
 CONFIGURE_OPTIONS+=        --with-debug-level=release
 CONFIGURE_OPTIONS+=        --with-toolchain-type=gcc
+CONFIGURE_OPTIONS+=        --with-extra-cflags="$(CFLAGS)"
 CONFIGURE_OPTIONS+=        --with-extra-cxxflags="$(CXXFLAGS)"
 CONFIGURE_OPTIONS+=        --with-extra-ldflags="-m64"
 CONFIGURE_OPTIONS+=        --with-cups=$(USRDIR)
