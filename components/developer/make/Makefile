@@ -23,17 +23,16 @@
 # Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
 #
 
-BUILD_BITS=			32_and_64
+BUILD_BITS=			64
 BUILD_SYSTEM=		configure
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		make
-COMPONENT_VERSION=	4.3
-COMPONENT_REVISION=	1
+COMPONENT_VERSION=	4.4.1
 COMPONENT_PROJECT_URL=	https://www.gnu.org/software/make/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:e05fdde47c5f7ca45cb697e973894ff4f5d79e13b750ed57d7b66d8defc78e19
+COMPONENT_ARCHIVE_HASH=	sha256:dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3
 COMPONENT_ARCHIVE_URL=	https://ftp.gnu.org/gnu/make/$(COMPONENT_ARCHIVE)
 
 include $(WS_MAKE_RULES)/common.mk

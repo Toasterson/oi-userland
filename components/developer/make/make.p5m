@@ -38,14 +38,10 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 license make.license license="GPLv3, FDLv1.3"
 
 file usr/bin/gmake path=usr/gnu/bin/make
-file usr/bin/$(MACH64)/gmake path=usr/gnu/bin/$(MACH64)/make
 
 file usr/share/man/man1/gmake.1 path=usr/gnu/share/man/man1/make.1
 link path=usr/bin/gmake target=../gnu/bin/make facet.compat.gnulinks=true
-link path=usr/bin/$(MACH64)/gmake \
-    target=../../gnu/bin/$(MACH64)/make facet.compat.gnulinks=true
-link path=usr/share/man/man1/gmake.1 \
-    target=../../../gnu/share/man/man1/make.1 facet.compat.gnulinks=all
+
 link path=usr/sfw/bin/gmake target=../../gnu/bin/make
 link path=usr/sfw/share/man/man1/gmake.1 \
     target=../../../../gnu/share/man/man1/make.1
@@ -58,6 +54,7 @@ file path=usr/include/gnumake.h
 file path=usr/share/info/make.info
 file path=usr/share/info/make.info-1
 file path=usr/share/info/make.info-2
+file path=usr/share/info/make.info-3
 file path=usr/share/locale/be/LC_MESSAGES/make.mo
 file path=usr/share/locale/bg/LC_MESSAGES/make.mo
 file path=usr/share/locale/cs/LC_MESSAGES/make.mo
@@ -79,6 +76,7 @@ file path=usr/share/locale/nl/LC_MESSAGES/make.mo
 file path=usr/share/locale/pl/LC_MESSAGES/make.mo
 file path=usr/share/locale/pt/LC_MESSAGES/make.mo
 file path=usr/share/locale/pt_BR/LC_MESSAGES/make.mo
+file path=usr/share/locale/ro/LC_MESSAGES/make.mo
 file path=usr/share/locale/ru/LC_MESSAGES/make.mo
 file path=usr/share/locale/sr/LC_MESSAGES/make.mo
 file path=usr/share/locale/sv/LC_MESSAGES/make.mo
@@ -87,3 +85,4 @@ file path=usr/share/locale/uk/LC_MESSAGES/make.mo
 file path=usr/share/locale/vi/LC_MESSAGES/make.mo
 file path=usr/share/locale/zh_CN/LC_MESSAGES/make.mo
 file path=usr/share/locale/zh_TW/LC_MESSAGES/make.mo
+file path=usr/share/man/man1/gmake.1
