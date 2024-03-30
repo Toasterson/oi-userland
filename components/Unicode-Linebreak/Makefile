@@ -11,26 +11,24 @@
 
 #
 # This file was automatically generated using the following command:
-#   $WS_TOOLS/perl-integrate-module Unicode::LineBreak
+#   $WS_TOOLS/perl-integrate-module -d Unicode-Linebreak Unicode::LineBreak
 #
 
 BUILD_STYLE = makemaker
+USE_COMMON_TEST_MASTER = no
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_PERL_MODULE =		Unicode::LineBreak
 HUMAN_VERSION =			2019.001
 COMPONENT_REVISION =		1
-COMPONENT_SUMMARY =		Unicode::LineBreak - UAX #14 Unicode Line Breaking Algorithm
-COMPONENT_CPAN_AUTHOR =		NEZUMI
+COMPONENT_SUMMARY =		Unicode::LineBreak - TODO
+COMPONENT_ARCHIVE_URL =		\
+	https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/Unicode-LineBreak-2019.001.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:486762e4cacddcc77b13989f979a029f84630b8175e7fef17989e157d4b6318a
-COMPONENT_LICENSE =		Artistic-1.0-Perl OR GPL-1.0-or-later
+	sha256:TODO
+COMPONENT_LICENSE =		license:TODO
+COMPONENT_LICENSE_FILE =	licfile:TODO
 
 include $(WS_MAKE_RULES)/common.mk
 
-# Auto-generated dependencies
-PERL_REQUIRED_PACKAGES += library/perl-5/mime-charset
-PERL_REQUIRED_PACKAGES += runtime/perl
-REQUIRED_PACKAGES += system/input-method/library/libthai
-REQUIRED_PACKAGES += system/library

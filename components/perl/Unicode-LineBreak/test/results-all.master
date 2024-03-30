@@ -19,7 +19,7 @@ t/15array.t .............. ok
 t/16regex.t .............. ok
 t/17prop.t ............... ok
 t/18currency.t ........... ok
-t/pod.t .................. ok
+t/pod.t .................. skipped: Test::Pod 1.00 or later required for testing POD
 All tests successful.
-Files=22, Tests=6963
+Files=22, Tests=6954
 Result: PASS
