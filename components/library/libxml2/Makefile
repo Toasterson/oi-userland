@@ -67,6 +67,8 @@ CONFIGURE_OPTIONS += --with-ftp
 CONFIGURE_OPTIONS += --with-xptr-locs
 CONFIGURE_OPTIONS += --with-history
 CONFIGURE_OPTIONS += --with-legacy
+CONFIGURE_OPTIONS += --with-lzma=no
+CONFIGURE_OPTIONS += --with-zlib=no
 CONFIGURE_OPTIONS.32 += --with-python=no
 
 CONFIGURE_ENV.64     += PYTHON=$(PYTHON)
@@ -102,9 +104,7 @@ COMPONENT_TEST_TRANSFORMS = \
 	'-e "/.*/d" '
 
 # Auto-generated dependencies
-REQUIRED_PACKAGES += compress/xz
 REQUIRED_PACKAGES += library/readline
-REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math
