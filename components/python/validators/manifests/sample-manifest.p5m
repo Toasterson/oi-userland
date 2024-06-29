@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2023 <contributor>
+# Copyright 2024 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)-$(PYV)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -23,28 +23,36 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-file path=usr/lib/python$(PYVER)/vendor-packages/validators-$(HUMAN_VERSION).dist-info/LICENSE
+file path=usr/lib/python$(PYVER)/vendor-packages/validators-$(HUMAN_VERSION).dist-info/LICENSE.txt
 file path=usr/lib/python$(PYVER)/vendor-packages/validators-$(HUMAN_VERSION).dist-info/METADATA
 file path=usr/lib/python$(PYVER)/vendor-packages/validators-$(HUMAN_VERSION).dist-info/WHEEL
 file path=usr/lib/python$(PYVER)/vendor-packages/validators-$(HUMAN_VERSION).dist-info/top_level.txt
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/__init__.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/_extremes.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/_tld.txt
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/between.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/btc_address.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/card.py
-file path=usr/lib/python$(PYVER)/vendor-packages/validators/country_code.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/country.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/cron.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/domain.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/email.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/encoding.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/finance.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/hashes.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/hostname.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/i18n/__init__.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/i18n/es.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/i18n/fi.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/i18n/fr.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/i18n/ind.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/iban.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/ip_address.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/length.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/mac_address.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/py.typed
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/slug.py
+file path=usr/lib/python$(PYVER)/vendor-packages/validators/uri.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/url.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/utils.py
 file path=usr/lib/python$(PYVER)/vendor-packages/validators/uuid.py

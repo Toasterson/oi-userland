@@ -234,8 +234,6 @@ COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_BUILD_DIR)/transform-$(PYTHON_VE
 # See below for test style specific transforms.
 COMPONENT_TEST_TRANSFORMS += "-e 's|$(PYTHON_DIR)|\$$(PYTHON_DIR)|g'"
 
-# Make sure the test environment is prepared before we start tests
-COMPONENT_TEST_DEP +=	component-test-environment-prep
 # Testing depends on install target because we want to test installed modules
 COMPONENT_TEST_DEP +=	$(BUILD_DIR)/%/.installed
 # Point Python to the proto area so it is able to find installed modules there
@@ -435,7 +433,6 @@ $(eval $(call disable-pytest-plugin,helpers_namespace,pytest-helpers-namespace))
 $(eval $(call disable-pytest-plugin,hypothesispytest,hypothesis))	# adds line to test report header
 $(eval $(call disable-pytest-plugin,jaraco.test.http,jaraco-test))
 $(eval $(call disable-pytest-plugin,kgb,kgb))
-$(eval $(call disable-pytest-plugin,lazy-fixture,pytest-lazy-fixture))
 $(eval $(call disable-pytest-plugin,metadata,pytest-metadata))		# adds line to test report header
 $(eval $(call disable-pytest-plugin,mypy,pytest-mypy))			# runs extra test(s)
 $(eval $(call disable-pytest-plugin,perf,pytest-perf))			# https://github.com/jaraco/pytest-perf/issues/9
@@ -448,6 +445,7 @@ $(eval $(call disable-pytest-plugin,pytest_fakefs,pyfakefs))
 $(eval $(call disable-pytest-plugin,pytest_forked,pytest-forked))
 $(eval $(call disable-pytest-plugin,pytest_httpserver,pytest-httpserver))
 $(eval $(call disable-pytest-plugin,pytest_ignore_flaky,pytest-ignore-flaky))
+$(eval $(call disable-pytest-plugin,pytest_lazyfixture,pytest-lazy-fixtures))
 $(eval $(call disable-pytest-plugin,pytest_mock,pytest-mock))
 $(eval $(call disable-pytest-plugin,randomly,pytest-randomly))		# reorders tests
 $(eval $(call disable-pytest-plugin,regressions,pytest-regressions))
@@ -467,12 +465,11 @@ $(eval $(call disable-pytest-plugin,skip-markers,pytest-skip-markers))
 $(eval $(call disable-pytest-plugin,socket,pytest-socket))
 $(eval $(call disable-pytest-plugin,subprocess,pytest-subprocess))
 $(eval $(call disable-pytest-plugin,subtests,pytest-subtests))
-$(eval $(call disable-pytest-plugin,tempdir,pytest-tempdir))		# adds line to test report header
+$(eval $(call disable-pytest-plugin,system-statistics,pytest-system-statistics))
 $(eval $(call disable-pytest-plugin,time_machine,time-machine))
 $(eval $(call disable-pytest-plugin,timeout,pytest-timeout))
 $(eval $(call disable-pytest-plugin,travis-fold,pytest-travis-fold))
 $(eval $(call disable-pytest-plugin,typeguard,typeguard))
-$(eval $(call disable-pytest-plugin,unittest_mock,backports-unittest-mock))
 $(eval $(call disable-pytest-plugin,xdist,pytest-xdist))
 $(eval $(call disable-pytest-plugin,xdist.looponfail,pytest-xdist))
 $(eval $(call disable-pytest-plugin,xprocess,pytest-xprocess))		# adds a reminder line to test output
@@ -483,22 +480,22 @@ $(eval $(call disable-pytest-plugin,xprocess,pytest-xprocess))		# adds a reminde
 PYTEST_FASTFAIL = -x
 PYTEST_ADDOPTS += $(PYTEST_FASTFAIL)
 
+# By default we are not interested to see the default long tracebacks.
+# Detailed tracebacks are shown either for failures or xfails.  We aim to see
+# testing passed so there should be no failures.  Since xfails are expected
+# failures we are not interested in detailed tracebacks here at all since they
+# could contain random data, like pointers, temporary file names, etc.
+PYTEST_TRACEBACK = --tb=line
+PYTEST_ADDOPTS += $(PYTEST_TRACEBACK)
+
 # Normalize pytest test results.  The pytest framework could be used either
 # directly or via tox or setup.py so add these transforms for all test styles
 # unconditionally.
 COMPONENT_TEST_TRANSFORMS += \
 	"-e 's/^\(platform sunos5 -- Python \)$(shell echo $(PYTHON_VERSION) | $(GSED) -e 's/\./\\./g')\.[0-9]\{1,\}.*\( -- .*\)/\1\$$(PYTHON_VERSION).X\2/'"
-COMPONENT_TEST_TRANSFORMS += "-e '/^Using --randomly-seed=[0-9]\{1,\}$$/d'"	# this is random
 COMPONENT_TEST_TRANSFORMS += "-e '/^plugins: /d'"				# order of listed plugins could vary
 COMPONENT_TEST_TRANSFORMS += "-e '/^-\{1,\} coverage: /,/^$$/d'"		# remove coverage report
-# sort list of pytest unit tests and drop percentage
-COMPONENT_TEST_TRANSFORMS += \
-	"| ( \
-		$(GSED) -u -e '/^=\{1,\} test session starts /q' ; \
-		$(GSED) -u -e '/^$$/q' ; \
-		$(GSED) -u -e 's/ *\[...%\]$$//' -e '/^$$/Q' | $(SORT) | $(NAWK) '{print}END{if(NR>0)printf(\"\\\\n\")}' ; \
-		$(CAT) \
-	) | $(COMPONENT_TEST_TRANSFORMER)"
+COMPONENT_TEST_TRANSFORMS += "-e 's/ \{1,\}\[...%\]\$$//'"			# drop percentage
 COMPONENT_TEST_TRANSFORMS += \
 	"-e 's/^=\{1,\} \(.*\) in [0-9]\{1,\}\.[0-9]\{1,\}s \(([^)]*) \)\?=\{1,\}$$/======== \1 ========/'"	# remove timing
 # Remove slowest durations report for projects that run pytest with --durations option
@@ -510,6 +507,18 @@ COMPONENT_TEST_TRANSFORMS += "-e '/^=\{1,\} short test summary info =\{1,\}$$/,/
 COMPONENT_TEST_TRANSFORMS += \
 	$(if $(filter library/python/pytest-benchmark-$(subst .,,$(PYTHON_VERSION)), $(REQUIRED_PACKAGES) $(TEST_REQUIRED_PACKAGES)),"| ( \
 		$(GSED) -e '/^-\{1,\} benchmark/,/^=/{/^=/!d}' \
+	) | $(COMPONENT_TEST_TRANSFORMER) -e ''")
+
+# Normalize test results produced by pytest-randomly
+USE_PYTEST_RANDOMLY = $(filter library/python/pytest-randomly-$(subst .,,$(PYTHON_VERSION)), $(REQUIRED_PACKAGES) $(TEST_REQUIRED_PACKAGES))
+PYTEST_SORT_TESTS = $(USE_PYTEST_RANDOMLY)
+COMPONENT_TEST_TRANSFORMS += $(if $(strip $(USE_PYTEST_RANDOMLY)),"-e '/^Using --randomly-seed=[0-9]\{1$(comma)\}\$$/d'")
+COMPONENT_TEST_TRANSFORMS += \
+	$(if $(strip $(PYTEST_SORT_TESTS)),"| ( \
+		$(GSED) -u -e '/^=\{1$(comma)\} test session starts /q' ; \
+		$(GSED) -u -e '/^\$$/q' ; \
+		$(GSED) -u -e '/^\$$/Q' | $(SORT) | $(GSED) -e '\$$a\'\$$'\\\n\\\n' ; \
+		$(CAT) \
 	) | $(COMPONENT_TEST_TRANSFORMER) -e ''")
 
 # Normalize test results produced by pytest-xdist
@@ -528,6 +537,22 @@ COMPONENT_TEST_TRANSFORMS += \
 		) ; \
 		$(CAT) \
 	) | $(COMPONENT_TEST_TRANSFORMER) -e ''")
+
+# Normalize stestr test results
+USE_STESTR = $(filter library/python/stestr-$(subst .,,$(PYTHON_VERSION)), $(REQUIRED_PACKAGES) $(TEST_REQUIRED_PACKAGES))
+COMPONENT_TEST_TRANSFORMS += \
+	$(if $(strip $(USE_STESTR)),"| ( \
+			$(GSED) -e '0,/^{[0-9]\{1,\}}/{//i\'\$$'\\\n{0}\\\n}' \
+				-e 's/^\(Ran: [0-9]\{1,\} tests\{0,1\}\) in .*\$$/\1/' \
+				-e '/^Sum of execute time for each test/d' \
+				-e '/^ - Worker /d' \
+		) | ( \
+			$(GSED) -u -e '/^{0}\$$/Q' ; \
+			$(GSED) -u -e 's/^{[0-9]\{1,\}} //' \
+				-e 's/\[[.0-9]\{1,\}s\] \.\.\./.../' \
+				-e '/^\$$/Q' | $(SORT) | $(GSED) -e '\$$a\'\$$'\\\n\\\n' ; \
+			$(CAT) \
+		) | $(COMPONENT_TEST_TRANSFORMER) -e ''")
 
 # Normalize setup.py test results.  The setup.py testing could be used either
 # directly or via tox so add these transforms for all test styles
@@ -639,10 +664,13 @@ COMPONENT_POST_INSTALL_ACTION += \
 	| $(PYTHON) $(WS_TOOLS)/python-requires - >> $(@D)/.depend-test ;
 
 # Convert raw per version lists of test dependencies to single list of
-# TEST_REQUIRED_PACKAGES entries
+# TEST_REQUIRED_PACKAGES entries.  Some Python projects lists their own project
+# as a test dependency so filter this out here too.
 $(BUILD_DIR)/META.depend-test.required:	$(INSTALL_$(MK_BITS))
 	$(CAT) $(INSTALL_$(MK_BITS):%.installed=%.depend-test) | $(SORT) -u \
-		| $(GSED) -e 's/.*/TEST_REQUIRED_PACKAGES.python += library\/python\/&/' > $@
+		| $(GSED) -e 's/.*/TEST_REQUIRED_PACKAGES.python += library\/python\/&/' \
+		| ( $(GNU_GREP) -v ' $(COMPONENT_FMRI)$$' || true ) \
+		> $@
 
 # Add META.depend-test.required to the generated list of REQUIRED_PACKAGES
 REQUIRED_PACKAGES_TRANSFORM += -e '$$r $(BUILD_DIR)/META.depend-test.required'

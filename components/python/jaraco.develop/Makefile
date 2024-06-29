@@ -19,39 +19,44 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		jaraco.develop
-HUMAN_VERSION =			8.6.0
-COMPONENT_SUMMARY =		jaraco.develop - Development utilities by jaraco
+HUMAN_VERSION =			8.15.0
+COMPONENT_SUMMARY =		Development utilities by jaraco
 COMPONENT_PROJECT_URL =		https://github.com/jaraco/jaraco.develop
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/5c/1c/600555b7a9fab81118e4520e5aa679c8726f87aa6cdf5873178fd449a49f/jaraco.develop-8.6.0.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:d3ebc0a55bee14f89222f3ddcfc03fd01d5cd7b2b60c1105b0e77151a9756b1d
+	sha256:956f801f336829c965f9540a788f96fa63ee0aa625ed2844c1e8f4cfca3e9b19
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
+
+COMPONENT_SRC =			jaraco_develop-$(HUMAN_VERSION)
 
 include $(WS_MAKE_RULES)/common.mk
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/autocommand
 PYTHON_REQUIRED_PACKAGES += library/python/build
+PYTHON_REQUIRED_PACKAGES += library/python/configupdater
+PYTHON_REQUIRED_PACKAGES += library/python/ini2toml
 PYTHON_REQUIRED_PACKAGES += library/python/jaraco-context
+PYTHON_REQUIRED_PACKAGES += library/python/jaraco-packaging
 PYTHON_REQUIRED_PACKAGES += library/python/jaraco-ui
 PYTHON_REQUIRED_PACKAGES += library/python/jaraco-vcs
 PYTHON_REQUIRED_PACKAGES += library/python/keyring
 PYTHON_REQUIRED_PACKAGES += library/python/packaging
 PYTHON_REQUIRED_PACKAGES += library/python/path
 PYTHON_REQUIRED_PACKAGES += library/python/pynacl
+PYTHON_REQUIRED_PACKAGES += library/python/requests
+PYTHON_REQUIRED_PACKAGES += library/python/requests-file
 PYTHON_REQUIRED_PACKAGES += library/python/requests-toolbelt
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools-scm
 PYTHON_REQUIRED_PACKAGES += library/python/subprocess-tee
+PYTHON_REQUIRED_PACKAGES += library/python/tomlkit
 PYTHON_REQUIRED_PACKAGES += library/python/wheel
 PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/pytest
-TEST_REQUIRED_PACKAGES.python += library/python/pytest-black
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-checkdocs
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-cov
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-enabler
+TEST_REQUIRED_PACKAGES.python += library/python/pytest-home
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-mypy
-TEST_REQUIRED_PACKAGES.python += library/python/pytest-subprocess
 TEST_REQUIRED_PACKAGES.python += library/python/types-requests

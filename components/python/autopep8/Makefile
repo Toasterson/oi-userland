@@ -14,18 +14,15 @@
 #   $WS_TOOLS/python-integrate-project autopep8
 #
 
-BUILD_STYLE = setup.py
+BUILD_STYLE = pyproject
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		autopep8
-HUMAN_VERSION =			2.0.4
-COMPONENT_SUMMARY =		autopep8 - A tool that automatically formats Python code to conform to the PEP 8 style guide
-COMPONENT_PROJECT_URL =		https://github.com/hhatto/autopep8
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/e0/8a/9be661f5400867a09706e29f5ab99a59987fd3a4c337757365e7491fa90b/autopep8-2.0.4.tar.gz
+HUMAN_VERSION =			2.3.0
+COMPONENT_SUMMARY =		A tool that automatically formats Python code to conform to the PEP 8 style guide
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:2913064abd97b3419d1cc83ea71f042cb821f87e45b9c88cad5ad3c4ea87fe0c
+	sha256:5cfe45eb3bef8662f6a3c7e28b7c0310c7310d340074b7f0f28f9810b44b7ef4
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -33,12 +30,14 @@ include $(WS_MAKE_RULES)/common.mk
 
 # Normalize random temporary directory name
 COMPONENT_TEST_TRANSFORMS += "-e 's|\(/autopep8test\)......../|\1XXXXXXXX/|'"
+# Normalize random temporary file name
+COMPONENT_TEST_TRANSFORMS += "-e 's|^/tmp/.\{11\}\.py|/tmp/XXXXXXXXXXX.py|'"
 
 # Auto-generated dependencies
-PYTHON_REQUIRED_PACKAGES += library/python/importlib-metadata
 PYTHON_REQUIRED_PACKAGES += library/python/pycodestyle
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools
 PYTHON_REQUIRED_PACKAGES += library/python/tomli
+PYTHON_REQUIRED_PACKAGES += library/python/wheel
 PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/pycodestyle
 TEST_REQUIRED_PACKAGES.python += library/python/pydiff

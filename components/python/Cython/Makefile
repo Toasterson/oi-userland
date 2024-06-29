@@ -19,13 +19,11 @@ BUILD_STYLE = setup.py
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		Cython
-HUMAN_VERSION =			3.0.8
+HUMAN_VERSION =			3.0.10
 COMPONENT_SUMMARY =		Cython - The Cython compiler for writing C extensions in the Python language.
 COMPONENT_PROJECT_URL =		https://cython.org/
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/68/09/ffb61f29b8e3d207c444032b21328327d753e274ea081bc74e009827cc81/Cython-3.0.8.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:8333423d8fd5765e7cceea3a9985dd1e0a5dfeb2734629e1a2ed2d6233d39de6
+	sha256:dcc96739331fb854dcf503f94607576cfe8488066c61ca50dfd55836f132de99
 COMPONENT_LICENSE =		Apache-2.0
 COMPONENT_LICENSE_FILE =	LICENSE.txt
 
@@ -45,6 +43,9 @@ COMPONENT_TEST_TRANSFORMS += "-e 's/\(Broken object at \)0x[a-f0-9]\{1,\}>/\1\$$
 COMPONENT_TEST_TRANSFORMS += "-e '/^libgcov profiling error:/d'"
 # Remove profiling info
 COMPONENT_TEST_TRANSFORMS += "-e '/^Most expensive pipeline stages:/d'"
+
+# https://github.com/OpenIndiana/oi-userland/pull/16549#issuecomment-2037519250
+TEST_CONFLICTING_PACKAGES.python += library/python/numpy
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/importlib-metadata

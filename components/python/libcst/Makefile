@@ -19,27 +19,14 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		libcst
-HUMAN_VERSION =			1.1.0
-COMPONENT_SUMMARY =		libcst - A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7, 3.8, 3.9, and 3.10 programs.
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/81/ef/610498b5e982d9dd64f2af8422ece1be44a946a8dbda15d08087e0e1ff08/libcst-1.1.0.tar.gz
+HUMAN_VERSION =			1.4.0
+COMPONENT_SUMMARY =		A concrete syntax tree with AST-like properties for Python 3.0 through 3.12 programs.
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:0acbacb9a170455701845b7e940e2d7b9519db35a86768d86330a0b0deae1086
+	sha256:449e0b16604f054fa7f27c3ffe86ea7ef6c409836fe68fe4e752a1894175db00
 COMPONENT_LICENSE =		MIT OR PSF-2.0
 COMPONENT_LICENSE_FILE =	LICENSE
 
 TEST_STYLE = pytest
-
-#
-# Following dependency loops were detected (where 'A --> B' means 'A needs B to
-# run tests', and 'A ==> B' means 'A needs B for build and/or run'):
-#
-# libcst --> hypothesmith ==> libcst
-#
-# To break loops we need to allow this project to integrate without testing in
-# a case the required projects are not available yet (bootstrap).
-#
-PYTHON_TEST_BOOTSTRAP = yes
 
 include $(WS_MAKE_RULES)/common.mk
 
@@ -67,16 +54,21 @@ LD_Z_IGNORE=
 COMPONENT_PRE_TEST_ACTION +=	$(MV) $(@D)/libcst $(@D)/libcst-RENAMED ;
 COMPONENT_POST_TEST_ACTION +=	$(MV) $(@D)/libcst-RENAMED $(@D)/libcst ;
 
-# We are unable to detect this dependency automatically
-TEST_REQUIRED_PACKAGES.python += library/python/hypothesmith
+# Tests in tests/test_fuzz.py require hypothesmith.  We do not have
+# hypothesmith package (yet) so we need to disable those tests.
+PYTEST_ADDOPTS += --ignore libcst-RENAMED/tests/test_fuzz.py
+
+# https://github.com/Instagram/LibCST/issues/818
+PYTEST_ADDOPTS += --ignore libcst-RENAMED/codegen/tests/test_codegen_clean.py
+
+# Remove extra -RENAMED from test report
+COMPONENT_TEST_TRANSFORMS += "-e 's/\(libcst\)-RENAMED/\1/g'"
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/pyyaml
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools-rust
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools-scm
-PYTHON_REQUIRED_PACKAGES += library/python/typing-extensions
-PYTHON_REQUIRED_PACKAGES += library/python/typing-inspect
 PYTHON_REQUIRED_PACKAGES += library/python/wheel
 PYTHON_REQUIRED_PACKAGES += runtime/python
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)

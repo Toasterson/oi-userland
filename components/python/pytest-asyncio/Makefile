@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		pytest-asyncio
-HUMAN_VERSION =			0.23.5
+HUMAN_VERSION =			0.23.6
 COMPONENT_SUMMARY =		pytest-asyncio - Pytest support for asyncio
 COMPONENT_PROJECT_URL =		https://github.com/pytest-dev/pytest-asyncio
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:3a048872a9c4ba14c3e90cc1aa20cbc2def7d01c7c8db3777ec281ba9c057675
+	sha256:ffe523a89c1c222598c76856e76852b787504ddb72dd5d9b6617ffa8aa2cde5f
 COMPONENT_LICENSE =		Apache-2.0
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -33,7 +33,6 @@ include $(WS_MAKE_RULES)/common.mk
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-checkdocs
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-console-scripts
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-enabler
-TEST_CONFLICTING_PACKAGES.python += library/python/pytest-lazy-fixture
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-randomly
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-relaxed
 TEST_CONFLICTING_PACKAGES.python += library/python/pytest-reporter

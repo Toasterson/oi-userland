@@ -33,12 +33,12 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnutls
 COMPONENT_MJR_VERSION=	3.8
-COMPONENT_VERSION=	$(COMPONENT_MJR_VERSION).3
+COMPONENT_VERSION=	$(COMPONENT_MJR_VERSION).5
 COMPONENT_SUMMARY=	GNU transport layer security library
 COMPONENT_PROJECT_URL=  https://gnutls.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH= sha256:f74fc5954b27d4ec6dfbb11dea987888b5b124289a3703afcada0ee520f4173e
+COMPONENT_ARCHIVE_HASH= sha256:66269a2cfe0e1c2dabec87bdbbd8ab656f396edd9a40dd006978e003cfa52bfc
 COMPONENT_ARCHIVE_URL=  https://www.gnupg.org/ftp/gcrypt/gnutls/v$(COMPONENT_MJR_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_SIG_URL=	$(COMPONENT_ARCHIVE_URL).sig
 COMPONENT_FMRI=		library/gnutls-3
@@ -56,19 +56,14 @@ CONFIGURE_OPTIONS += --with-default-trust-store-dir=/etc/certs/CA
 # usr/share/info/dir is provided by text/texinfo
 COMPONENT_POST_INSTALL_ACTION += $(RM) $(PROTOUSRSHAREDIR)/info/dir ;
 
-unexport SHELLOPTS
-
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
-REQUIRED_PACKAGES += compress/zstd
-REQUIRED_PACKAGES += library/brotli
 REQUIRED_PACKAGES += library/desktop/p11-kit
 REQUIRED_PACKAGES += library/gmp
 REQUIRED_PACKAGES += library/libidn2
 REQUIRED_PACKAGES += library/libtasn1
 REQUIRED_PACKAGES += library/libunistring
 REQUIRED_PACKAGES += library/nettle
-REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math

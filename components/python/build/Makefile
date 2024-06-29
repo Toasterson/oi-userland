@@ -19,12 +19,10 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		build
-HUMAN_VERSION =			1.0.3
+HUMAN_VERSION =			1.2.1
 COMPONENT_SUMMARY =		build - A simple, correct Python build frontend
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/98/e3/83a89a9d338317f05a68c86a2bbc9af61235bc55a0c6a749d37598fb2af1/build-1.0.3.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:538aab1b64f9828977f84bc63ae570b060a8ed1be419e7870b8b4fc5e6ea553b
+	sha256:526263f4870c26f26c433545579475377b2b7588b6f1eac76a001e873ae3e19d
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -32,10 +30,6 @@ COMPONENT_LICENSE_FILE =	LICENSE
 PYTHON_BOOTSTRAP = yes
 
 include $(WS_MAKE_RULES)/common.mk
-
-# This is to make sure we do not run pytest with "-n auto" because it is hard
-# to normalize pytest-xdist test results.
-COMPONENT_TEST_TARGETS += --
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/flit-core

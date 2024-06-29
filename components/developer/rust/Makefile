@@ -32,54 +32,51 @@
 # the compiler build itself is intensively using python tools
 # therefor this patially python settings
 
-TEST_STYLE=		none
-
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		rustc
-COMPONENT_VERSION=	1.75.0
+COMPONENT_VERSION=	1.78.0
 COMPONENT_SUMMARY=	Rust - Safe, concurrent, practical language
 COMPONENT_PROJECT_URL=	https://www.rust-lang.org
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)-src
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:5b739f45bc9d341e2d1c570d65d2375591e22c2d23ef5b8a37711a0386abc088
+COMPONENT_ARCHIVE_HASH=	sha256:ff544823a5cb27f2738128577f1e7e00ee8f4c83f2a348781ae4fc355e91d5a9
 COMPONENT_ARCHIVE_URL=	https://static.rust-lang.org/dist/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=		developer/lang/rustc
 COMPONENT_CLASSIFICATION=	Development/Other Languages
 COMPONENT_LICENSE=	MIT or Apache-2.0
 COMPONENT_LICENSE_FILE=	LICENSE-APACHE
 
-RUST_BOOTSTRAP_PATH=	$(BUILD_DIR)/$(MACH64)
-RUST_ARCH=		x86_64-unknown-illumos
+RUST_BOOTSTRAP_PATH= $(BUILD_DIR)/$(MACH64)
+RUST_ARCH= x86_64-unknown-illumos
 
-TEST_TARGET=		$(NO_TESTS)
+TEST_TARGET= $(NO_TESTS)
 
 include $(WS_MAKE_RULES)/common.mk
-include $(WS_MAKE_RULES)/setup.py.mk
 
-CLANG_VERSION=		17
+CLANG_VERSION= 18
 
 # Need some help to pick the correct ar binary
-GNUAR=$(GNUBIN)/ar
+GNUAR= $(GNUBIN)/ar
 
 # Put the bits cargo downloads in a private directory.  This could be cached
 # somewhere more permanent, but it's important to make sure that a person's
 # $HOME/.cargo isn't used.
-CARGO_HOME=             $(@D)/.cargo
+CARGO_HOME= $(@D)/.cargo
 
-PATH=                   $(PATH.gnu)
+PATH= $(PATH.gnu)
 
-RUSTC_BIN_POST=		cargo
-RUSTC_BIN_POST+=	clippy-driver
-RUSTC_BIN_POST+=	rls
-RUSTC_BIN_POST+=	rustc
-RUSTC_BIN_POST+=	rustdoc
+RUSTC_BIN_POST =  cargo
+RUSTC_BIN_POST += clippy-driver
+RUSTC_BIN_POST += rls
+RUSTC_BIN_POST += rustc
+RUSTC_BIN_POST += rustdoc
 
 # Add arch triplet to pkg macros
-PKG_MACROS+=		RUST_ARCH="$(RUST_ARCH)"
+PKG_MACROS += RUST_ARCH="$(RUST_ARCH)"
 
 # Rust expects the library path to be /usr/lib and is broken otherwise 
-RUSTC_LIBDIR=		$(USRLIBDIR)
+RUSTC_LIBDIR= $(USRLIBDIR)
 
 COMPONENT_PRE_CONFIGURE_ACTION += ( CLONEY_MODE=hardlink $(CLONEY) $(SOURCE_DIR) $(@D); )
 
@@ -114,16 +111,11 @@ CONFIGURE_OPTIONS += --enable-llvm-link-shared
 CONFIGURE_OPTIONS += --llvm-root=$(CLANG_PREFIX)
 CONFIGURE_OPTIONS += --llvm-config=$(CLANG_PREFIX)/bin
 
-COMPONENT_BUILD_CMD = $(PYTHON) x.py build 
-COMPONENT_INSTALL_CMD = $(PYTHON) x.py install
-COMPONENT_INSTALL_ARGS =
-
 # Cleanup standard environment!
 COMPONENT_BUILD_ENV =
 COMPONENT_BUILD_ENV += OPENSSL_DIR=$(OPENSSL_PREFIX)
 COMPONENT_BUILD_ENV += OPENSSL_LIB_DIR=$(OPENSSL_LIBDIR)
 COMPONENT_BUILD_ENV += OPENSSL_INCLUDE_DIR=$(OPENSSL_INCDIR)
-COMPONENT_BUILD_ENV += OPENSSL_STATIC=0
 COMPONENT_BUILD_ENV += CC=$(CC)
 COMPONENT_BUILD_ENV += CFLAGS="$(CFLAGS)"
 COMPONENT_BUILD_ENV += CXX=$(CXX)
@@ -131,30 +123,27 @@ COMPONENT_BUILD_ENV += CXXFLAGS="$(CXXFLAGS)"
 COMPONENT_BUILD_ENV += AR=$(GNUAR)
 COMPONENT_BUILD_ENV += RUSTC=/usr/bin/rustc
 COMPONENT_BUILD_ENV += CARGO_HOME=$(CARGO_HOME)
-COMPONENT_BUILD_ENV += GMAKE=
-# Enforce linker consistency
-COMPONENT_BUILD_ENV +=	RUSTFLAGS="-C linker=$(CC)"
-COMPONENT_BUILD_ENV +=	RUST_BACKTRACE=1
+COMPONENT_BUILD_ENV += PATH=$(PATH)
+COMPONENT_BUILD_ENV += VERBOSE=1
+COMPONENT_BUILD_ENV += RUST_BACKTRACE=1
 
 COMPONENT_PRE_INSTALL_ACTION = mkdir -p $(PROTO_DIR)
 COMPONENT_POST_INSTALL_ACTION +=  $(TOUCH) $(BUILD_DIR)/META.depend-runtime.res
 
 # Cleanup standard environment
 COMPONENT_INSTALL_ENV= 
-COMPONENT_INSTALL_ENV+=	$(COMPONENT_BUILD_ENV)
-COMPONENT_INSTALL_ENV+=	CARGO_HOME=$(CARGO_HOME)
+COMPONENT_INSTALL_ENV += $(COMPONENT_BUILD_ENV)
+COMPONENT_INSTALL_ENV += CARGO_HOME=$(CARGO_HOME)
 # Set install path
-COMPONENT_INSTALL_ENV+=	DESTDIR=$(PROTO_DIR)
+COMPONENT_INSTALL_ENV += DESTDIR=$(PROTO_DIR)
 
 # manually added dependencies
 REQUIRED_PACKAGES += developer/lang/rustc # previous before build version
 
 # Auto-generated dependencies
-PYTHON_REQUIRED_PACKAGES += runtime/python
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
-REQUIRED_PACKAGES += library/libgit2
-REQUIRED_PACKAGES += library/security/openssl-31
+REQUIRED_PACKAGES += $(OPENSSL_PKG)
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library

@@ -1,13 +1,13 @@
 We have no pytest-ruff support yet.
 see https://github.com/tikv/jemallocator/issues/58
 
---- jaraco.develop-8.6.0/setup.cfg.orig
-+++ jaraco.develop-8.6.0/setup.cfg
-@@ -47,7 +47,6 @@
- 	pytest-mypy >= 0.9.1; \
- 	python_implementation != "PyPy"
- 	pytest-enabler >= 2.2
--	pytest-ruff
- 	
- 	pytest-subprocess
- 	types-requests
+--- jaraco_develop-8.15.0/pyproject.toml.orig
++++ jaraco_develop-8.15.0/pyproject.toml
+@@ -48,7 +48,6 @@
+ 	"pytest-cov",
+ 	"pytest-mypy",
+ 	"pytest-enabler >= 2.2",
+-	"pytest-ruff >= 0.2.1",
+ 
+ 	# local
+ 	"types-requests",

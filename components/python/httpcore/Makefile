@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		httpcore
-HUMAN_VERSION =			1.0.3
+HUMAN_VERSION =			1.0.5
 COMPONENT_SUMMARY =		httpcore - A minimal low-level HTTP client.
 COMPONENT_PROJECT_URL =		https://www.encode.io/httpcore/
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:5c0f9546ad17dac4d0772b0808856eb616eb8b48ce94f49ed819fd6982a8a544
+	sha256:34a38e2f9291467ee3b44e89dd52615370e152954ba21721378a87b2960f7a61
 COMPONENT_LICENSE =		BSD-3-Clause
 COMPONENT_LICENSE_FILE =	LICENSE.md
 
@@ -34,6 +34,7 @@ include $(WS_MAKE_RULES)/common.mk
 # This project does not support tox so we need to provide test requirements
 # manually.
 TEST_REQUIREMENTS_EXTRAS += http2
+TEST_REQUIREMENTS_EXTRAS += socks
 TEST_REQUIREMENTS_EXTRAS += asyncio
 
 # Test dependencies we are unable to detect automatically
@@ -48,3 +49,4 @@ PYTHON_REQUIRED_PACKAGES += library/python/hatchling
 PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/anyio
 TEST_REQUIRED_PACKAGES.python += library/python/h2
+TEST_REQUIRED_PACKAGES.python += library/python/socksio

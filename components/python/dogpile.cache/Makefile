@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		dogpile.cache
-HUMAN_VERSION =			1.3.1
-COMPONENT_SUMMARY =		dogpile.cache - A caching front-end based on the Dogpile lock.
+HUMAN_VERSION =			1.3.3
+COMPONENT_SUMMARY =		A caching front-end based on the Dogpile lock.
 COMPONENT_PROJECT_URL =		https://github.com/sqlalchemy/dogpile.cache
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:47d780a09cb7affe8d056ff97fd5ccc7f249e37ef911beca7e819ef7bf164358
+	sha256:f84b8ed0b0fb297d151055447fa8dcaf7bae566d4dbdefecdcc1f37662ab588b
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
 

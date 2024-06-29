@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2023 <contributor>
+# Copyright 2024 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)-$(PYV)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -91,15 +91,16 @@ file path=usr/lib/python$(PYVER)/vendor-packages/paste/urlmap.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/urlparser.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/PySourceColor.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/cgitb_hook.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/classinit.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/classinstance.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/converters.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/dateinterval.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/datetimeutil.py
+file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/field_storage.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/filemixin.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/finddata.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/findpackage.py
-file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/html.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/import_string.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/intset.py
 file path=usr/lib/python$(PYVER)/vendor-packages/paste/util/ip4.py
@@ -121,4 +122,3 @@ depend type=require fmri=__TBD pkg.debug.depend.file=python$(PYVER) \
 
 # Automatically generated dependencies based on distribution metadata
 depend type=require fmri=pkg:/library/python/setuptools-$(PYV)
-depend type=require fmri=pkg:/library/python/six-$(PYV)

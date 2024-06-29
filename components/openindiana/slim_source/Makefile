@@ -35,19 +35,19 @@ ONNV_BUILDNUM=$(BRANCHID)
 PKG_REPO=$(SOURCE_DIR)/packages/$(MACH)/nightly-nd/repo.redist
 
 CLEAN_PATHS += $(BUILD_DIR)
+CLOBBER_PATHS += $(SOURCE_DIR)
 
 COMPONENT_PREP_GIT=no
 include $(WS_MAKE_RULES)/prep.mk
 
-$(SOURCE_DIR)/.downloaded: $(ARCHIVES:%=$(USERLAND_ARCHIVES)%)
-	@[ -d $(SOURCE_DIR) ] || \
+$(SOURCE_DIR):
 	$(GIT) clone -b $(GIT_BRANCH) $(GIT_REPO) $(SOURCE_DIR)
+
+$(SOURCE_DIR)/.downloaded: $(SOURCE_DIR)
 	@cd $(SOURCE_DIR); $(GIT) checkout $(GIT_BRANCH); $(GIT) pull \
 	  $(GIT_REPO); $(GIT) log -1 --format=%H > .downloaded
 
-update:
-	@[ -d $(SOURCE_DIR) ] || \
-	$(GIT) clone -b $(GIT_BRANCH) $(GIT_REPO) $(SOURCE_DIR)
+update:	$(SOURCE_DIR)
 	cd $(SOURCE_DIR); $(GIT) pull $(GIT_REPO); \
 	  [ "$$($(GIT) log -1 --format=%H)" == "$$(cat .downloaded)" ] || \
 	  $(GIT) log -1 --format=%H > .downloaded
@@ -92,6 +92,9 @@ $(BUILD_DIR)/$(MACH)/publish.transforms: $(BUILD_DIR)/$(MACH)/.built
 	  $(BUILD_DIR)/$(MACH)/publish.transforms
 	echo "<transform set name=pkg.fmri -> emit set name=pkg5.info.git-rev value=$(shell cd $(COMPONENT_SRC); git rev-parse HEAD)>" >> \
 	  $(BUILD_DIR)/$(MACH)/publish.transforms
+	# Convert dependency on any version of Perl runtime to dependency on single unversioned runtime/perl
+	echo '<transform depend type=require-any fmri=pkg:/runtime/perl-5[0-9]+@ -> set fmri runtime/perl>' >> $(BUILD_DIR)/$(MACH)/publish.transforms
+	echo '<transform depend type=require-any fmri=runtime/perl$$ -> set type require>' >> $(BUILD_DIR)/$(MACH)/publish.transforms
 
 
 $(BUILD_DIR)/$(MACH)/.published: $(BUILD_DIR)/$(MACH)/publish.transforms
@@ -116,30 +119,8 @@ publish: update $(BUILD_DIR)/$(MACH)/.published
 
 print-package-names:
 	if test -d $(PKG_REPO); \
-	then pkgrepo list -H -F tsv -s $(PKG_REPO) | cut -f 2 | sort -u > pkg5.fmris; fi; \
+	then pkgrepo list -H -F tsv -s $(PKG_REPO) | cut -f 2 | $(SORT) -u > pkg5.fmris; fi; \
 	cat pkg5.fmris
-
-PACKAGE_NAMES  = consolidation/install/install-incorporation
-PACKAGE_NAMES += consolidation/install/install-redistributable
-PACKAGE_NAMES += install/distribution-constructor
-PACKAGE_NAMES += install/installadm
-PACKAGE_NAMES += SUNWauto-install-common
-PACKAGE_NAMES += SUNWauto-install
-PACKAGE_NAMES += SUNWdistro-const
-PACKAGE_NAMES += SUNWgui-install
-PACKAGE_NAMES += SUNWinstall-libs
-PACKAGE_NAMES += SUNWinstall-test
-PACKAGE_NAMES += SUNWinstall
-PACKAGE_NAMES += SUNWinstalladm-tools
-PACKAGE_NAMES += SUNWslim-utils
-PACKAGE_NAMES += system/install
-PACKAGE_NAMES += system/install/auto-install
-PACKAGE_NAMES += system/install/auto-install/auto-install-common
-PACKAGE_NAMES += system/install/gui-install
-PACKAGE_NAMES += system/install/media/internal
-PACKAGE_NAMES += system/install/tests
-PACKAGE_NAMES += system/install/text-install
-PACKAGE_NAMES += system/library/install
 
 # Build dependencies
 REQUIRED_PACKAGES += library/desktop/libglade

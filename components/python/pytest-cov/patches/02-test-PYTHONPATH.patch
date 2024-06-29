@@ -1,0 +1,10 @@
+--- pytest-cov-5.0.0/tests/test_pytest_cov.py.orig
++++ pytest-cov-5.0.0/tests/test_pytest_cov.py
+@@ -864,6 +864,7 @@
+     assert result.ret == 0
+ 
+ 
++@pytest.mark.skip(reason="mangles PYTHONPATH and so it is not able to find pytest-cov in proto area")
+ def test_central_subprocess_change_cwd_with_pythonpath(pytester, testdir, monkeypatch):
+     stuff = testdir.mkdir('stuff')
+     parent_script = stuff.join('parent_script.py')

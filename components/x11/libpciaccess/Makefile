@@ -14,32 +14,28 @@
 #
 
 X11_CATEGORY=LIB
+BUILD_STYLE= meson
 include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME=	   libpciaccess
-COMPONENT_VERSION= 0.17
-COMPONENT_FMRI=	   diagnostic/scanpci
+COMPONENT_VERSION= 0.18.1
 COMPONENT_SUMMARY= scanpci and libpciaccess - generic PCI access software
-COMPONENT_CLASSIFICATION=System/Hardware
 COMPONENT_ARCHIVE_EXTENSION= .tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:74283ba3c974913029e7a547496a29145b07ec51732bbb5b5c58d5025ad95b73
+COMPONENT_ARCHIVE_HASH=	sha256:4af43444b38adb5545d0ed1c2ce46d9608cc47b31c2387fc5181656765a6fa76
+COMPONENT_FMRI=	   diagnostic/scanpci
+COMPONENT_CLASSIFICATION=System/Hardware
 COMPONENT_LICENSE_FILE=	COPYING
 
-DROP_STATIC_LIBRARIES = yes
-
+DROP_STATIC_LIBRARIES= yes
 include $(WS_MAKE_RULES)/common.mk
 
-# Missing files in build dir for common without this.
-COMPONENT_PREP_ACTION = (cd $(@D) && \
-			PATH="$(PATH)" libtoolize --automake --copy --force && \
-                         aclocal -Im4 && \
-                         autoheader && \
-                         automake -a -f -c && \
-                         autoconf )
 
-# Drop 32-bit binaries
-COMPONENT_POST_INSTALL_ACTION += $(RM) -r $(PROTOUSRBINDIR32) ;
+# scanpci is missing in the prototype area so manually copy it over.
+COMPONENT_POST_INSTALL_ACTION.64 += ( \
+	$(MKDIR) $(PROTOUSRBINDIR) ; \
+	$(CP) $(BUILD_DIR_64)/scanpci/scanpci $(PROTOUSRBINDIR)/ ; ) ;
 
 # Auto-generated dependencies
+REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += system/library

@@ -11,27 +11,26 @@
 
 #
 # This file was automatically generated using the following command:
-#   $WS_TOOLS/python-integrate-project Paste
+#   $WS_TOOLS/python-integrate-project -d python/Paste paste
 #
 
 BUILD_STYLE = setup.py
 
 include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME =		Paste
-HUMAN_VERSION =			3.7.1
-COMPONENT_SUMMARY =		Paste - Tools for using a Web Server Gateway Interface stack
+COMPONENT_NAME =		paste
+HUMAN_VERSION =			3.10.1
+COMPONENT_SUMMARY =		paste - Tools for using a Web Server Gateway Interface stack
 COMPONENT_PROJECT_URL =		https://pythonpaste.readthedocs.io/
-COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/82/ad/700e4348501771829ad00410cd5dd67f639479168eb85f8b3e6cc98f59e0/Paste-3.7.1.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:6d07a8e1c7fa72b8cf403762a002f80d12c0384056956dd0a87cb9a3be64749a
+	sha256:1c3d12065a5e8a7a18c0c7be1653a97cf38cc3e9a5a0c8334a9dd992d3a05e4a
 COMPONENT_LICENSE =		MIT
+COMPONENT_LICENSE_FILE =	LICENSE
 
 include $(WS_MAKE_RULES)/common.mk
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools
-PYTHON_REQUIRED_PACKAGES += library/python/six
 PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/pytest
+TEST_REQUIRED_PACKAGES.python += library/python/setuptools

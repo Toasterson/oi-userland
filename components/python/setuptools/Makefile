@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		setuptools
-HUMAN_VERSION =			69.1.0
-COMPONENT_SUMMARY =		setuptools - Easily download, build, install, upgrade, and uninstall Python packages
+HUMAN_VERSION =			70.0.0
+COMPONENT_SUMMARY =		Easily download, build, install, upgrade, and uninstall Python packages
 COMPONENT_PROJECT_URL =		https://github.com/pypa/setuptools
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:850894c4195f09c4ed30dba56213bf7c3f21d86ed6bdaafb5df5972593bfc401
+	sha256:f211a66637b8fa059bb28183da127d4e86396c991a942b028c6650d4319c3fd0
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -44,26 +44,33 @@ PYTHON_BOOTSTRAP = yes
 
 include $(WS_MAKE_RULES)/common.mk
 
+# Testing expects there is no Cython installed
+TEST_CONFLICTING_PACKAGES.python += library/python/cython
+
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/wheel
 PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/build
 TEST_REQUIRED_PACKAGES.python += library/python/filelock
-TEST_REQUIRED_PACKAGES.python += library/python/flake8-2020
+TEST_REQUIRED_PACKAGES.python += library/python/importlib-metadata
 TEST_REQUIRED_PACKAGES.python += library/python/ini2toml
 TEST_REQUIRED_PACKAGES.python += library/python/jaraco-develop
 TEST_REQUIRED_PACKAGES.python += library/python/jaraco-envs
 TEST_REQUIRED_PACKAGES.python += library/python/jaraco-path
+TEST_REQUIRED_PACKAGES.python += library/python/mypy
 TEST_REQUIRED_PACKAGES.python += library/python/packaging
 TEST_REQUIRED_PACKAGES.python += library/python/pip
+TEST_REQUIRED_PACKAGES.python += library/python/pyproject-hooks
 TEST_REQUIRED_PACKAGES.python += library/python/pytest
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-checkdocs
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-cov
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-enabler
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-home
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-mypy
+TEST_REQUIRED_PACKAGES.python += library/python/pytest-subprocess
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-timeout
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-xdist
+TEST_REQUIRED_PACKAGES.python += library/python/tomli
 TEST_REQUIRED_PACKAGES.python += library/python/tomli-w
 TEST_REQUIRED_PACKAGES.python += library/python/virtualenv
 TEST_REQUIRED_PACKAGES.python += library/python/wheel

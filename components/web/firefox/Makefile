@@ -27,23 +27,27 @@ ESR =
 
 # CANDIDATE_BUILD is the build number found in the candidates directory.
 # CANDIDATE_BETA is the beta version found in the candidates directory.
-# Do not define either for final release build.
-# CANDIDATE_BUILD=1
+# CANDIDATE_NIGHTLY is the nightly release hosted on github
+# USE_HG_REPO is to use mozilla's hg source repo nstead of github
+# Do not define any for final release build.
+CANDIDATE_BUILD=1
 # CANDIDATE_BETA=9
+# CANDIDATE_NIGHTLY=1
+# USE_HG_REPO=1
 
 COMPONENT_NAME =	firefox
-COMPONENT_VERSION =	122.0.1
-COMPONENT_REVISION=	1
+COMPONENT_VERSION =	127.0.1
 COMPONENT_SUMMARY=      Mozilla Firefox Web browser
 COMPONENT_PROJECT_URL =	https://www.mozilla.com/firefox
 COMPONENT_SRC_NAME =	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_SRC = 	$(COMPONENT_SRC_NAME)
+
 ifdef CANDIDATE_BETA
 COMPONENT_ARCHIVE =	$(COMPONENT_NAME)-$(COMPONENT_VERSION)b$(CANDIDATE_BETA)$(ESR).source.tar.xz
 else
 COMPONENT_ARCHIVE =	$(COMPONENT_SRC_NAME)$(ESR).source.tar.xz
+# CANDIDATE_BETA
 endif
-COMPONENT_ARCHIVE_HASH= sha256:36f19c9a748eec2fd6d3a1594d0f1d7b715eaa1d9ed6d7eeda9db8478dcf36d6
+
 ifndef CANDIDATE_BUILD
 MOZILLA_FTP =		https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)
 else
@@ -53,11 +57,28 @@ MOZILLA_FTP =		https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/candidates/$(COMPON
 MOZILLA_FTP =		https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/candidates/$(COMPONENT_VERSION)b$(CANDIDATE_BETA)$(ESR)-candidates/build$(CANDIDATE_BUILD)
   endif
 endif
+
+ifdef CANDIDATE_NIGHTLY
+COMPONENT_GIT_HASH=     92e0074c4451a24732ff562c6588c18436d22438f6a81391a67461ed0729b2a7
+COMPONENT_SRC=          gecko-dev-$(COMPONENT_GIT_HASH)
+COMPONENT_ARCHIVE=      $(COMPONENT_GIT_HASH).tar.gz
+COMPONENT_ARCHIVE_URL=  https://github.com/mozilla/gecko-dev/archive/$(COMPONENT_ARCHIVE)
+  ifdef USE_HG_REPO
+  COMPONENT_HG_HASH=	ff0882e981495f07c521e0b00e1e83b050dfcdc2
+  COMPONENT_SRC=	mozilla-central-$(COMPONENT_HG_HASH)
+  COMPONENT_ARCHIVE=	$(COMPONENT_HG_HASH).zip
+  COMPONENT_ARCHIVE_URL= https://hg.mozilla.org/mozilla-central/archive/$(COMPONENT_ARCHIVE)
+  endif
+else
+COMPONENT_SRC = 	$(COMPONENT_SRC_NAME)
 COMPONENT_ARCHIVE_URL =	$(MOZILLA_FTP)/source/$(COMPONENT_ARCHIVE)
+endif
+
+COMPONENT_ARCHIVE_HASH= sha256:f8e13f346fe6965dfda7da62b669f0e1f915324dfe792661a1fc9bebc7f4eaa3
 COMPONENT_PROJECT_URL = https://www.mozilla.com/en-US/firefox/
 COMPONENT_FMRI=		web/browser/firefox
 
-RUST_VERSION = 1.74.0
+RUST_VERSION = 1.77.2
 
 # TODO: use remote hashfile to verify
 ALLOW_UNVERIFIED_DOWNLOADS=yes
@@ -68,19 +89,23 @@ LANG_LIST= ach af an ar ast az be bg bn br bs ca-valencia ca cak cs cy da de dsb
  hu hy-AM ia id is it ja ka kab kk km kn ko lij lt lv mk mr ms my nb-NO ne-NP nl nn-NO oc pa-IN \
  pl pt-BR pt-PT rm ro ru sat sc sco si sk sl son sq sr sv-SE szl ta te tg th tl tr trs uk ur uz vi xh zh-CN zh-TW
 
-ifdef CANDIDATE_BETA
+ifdef CANDIDATE_NIGHTLY
+FIREFOX_UPDATE_CHANNEL=nightly
+else
+  ifdef CANDIDATE_BETA
 LANG_FILES_LOCATION= \
 	https://ftp.mozilla.org/pub/firefox/candidates/$(COMPONENT_VERSION)b$(CANDIDATE_BETA)$(ESR)-candidates/build$(CANDIDATE_BUILD)/linux-x86_64/xpi
 FIREFOX_UPDATE_CHANNEL=beta
 else
-  ifdef CANDIDATE_BUILD
+    ifdef CANDIDATE_BUILD
 LANG_FILES_LOCATION= \
 	https://ftp.mozilla.org/pub/firefox/candidates/$(COMPONENT_VERSION)$(ESR)-candidates/build$(CANDIDATE_BUILD)/linux-x86_64/xpi
 FIREFOX_UPDATE_CHANNEL=default
-  else
+    else
 LANG_FILES_LOCATION= \
 	https://ftp.mozilla.org/pub/firefox/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi
 FIREFOX_UPDATE_CHANNEL=default
+    endif
   endif
 endif
 
@@ -203,6 +228,8 @@ CONFIGURE_ENV =	$(ENV)
 COMPONENT_BUILD_ENV =	$(ENV)
 COMPONENT_INSTALL_ENV += HOME=/tmp
 
+# language support is more complex on nightly release, support on beta and later
+ifndef CANDIDATE_NIGHTLY
 LANG_FILES=$(addsuffix .xpi,$(LANG_LIST))
 
 CLEAN_PATHS += $(LANG_FILES)
@@ -211,6 +238,7 @@ $(LANG_FILES):
 	$(FETCH) --file $@  --url $(LANG_FILES_LOCATION)/$@
 
 download prep:: $(LANG_FILES)
+endif
 
 COMPONENT_POST_BUILD_ACTION = \
 	(cd $(@D)/browser/installer ; $(ENV) $(COMPONENT_BUILD_ENV) \
@@ -238,15 +266,16 @@ clean::
 	$(RM) $(COMPONENT_LICENSE_FILE)
 
 # Build dependencies
-PYTHON_REQUIRED_PACKAGES += runtime/python
 PYTHON_REQUIRED_PACKAGES += library/python/psutil
+PYTHON_REQUIRED_PACKAGES += runtime/python
+REQUIRED_PACKAGES += database/sqlite-3
 REQUIRED_PACKAGES += developer/build/autoconf-213
-REQUIRED_PACKAGES += library/audio/pulseaudio
-REQUIRED_PACKAGES += system/header/header-audio
 REQUIRED_PACKAGES += developer/lang/rustc
 REQUIRED_PACKAGES += gnome/config/gconf
-REQUIRED_PACKAGES += database/sqlite-3
+REQUIRED_PACKAGES += library/audio/pulseaudio
 REQUIRED_PACKAGES += library/http-parser
+REQUIRED_PACKAGES += runtime/nodejs-22
+REQUIRED_PACKAGES += system/header/header-audio
 REQUIRED_PACKAGES += web/browser/lynx
 
 # Auto-generated dependencies

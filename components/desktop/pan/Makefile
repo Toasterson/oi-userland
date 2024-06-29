@@ -12,30 +12,28 @@
 # Copyright 2022 Niklas Poslovski
 #
 
+BUILD_STYLE= cmake
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         pan
-COMPONENT_VERSION=      0.155
+COMPONENT_VERSION=      0.159
 COMPONENT_PROJECT_URL=  https://pan.rebelbase.com
 COMPONENT_SUMMARY=      A powerful Newsgroup Article reader
 COMPONENT_FMRI=         desktop/nntp/pan
 COMPONENT_SRC=          $(COMPONENT_NAME)-v$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.bz2
-COMPONENT_ARCHIVE_HASH= sha256:3624ac3171fa8089825ce55b62b053db4f86d592f717c4d874c48ce0e885dff2
+COMPONENT_ARCHIVE_HASH= sha256:96f05c4ff60a009969bec79b6ba76b01528186d9c86fce55d158f2b4dc0876e2
 COMPONENT_ARCHIVE_URL=	https://gitlab.gnome.org/GNOME/pan/-/archive/v$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_CLASSIFICATION= Applications/Internet
 COMPONENT_LICENSE=      GPLv2
 COMPONENT_LICENSE_FILE= COPYING
 
-CONFIGURE_OPTIONS += --enable-gkr
-CONFIGURE_OPTIONS += --with-gnutls
-
 TEST_TARGET = $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
-COMPONENT_PREP_ACTION = ( cd $(@D) && PATH="$(PATH)" autoreconf --force --install )
-
 LDFLAGS += -lsocket -lnsl
+
+CMAKE_OPTIONS += -DWANT_GKR=ON
 
 # SPARC needs math library
 ifeq ($(strip $(MACH)),sparc)
