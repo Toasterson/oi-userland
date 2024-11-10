@@ -114,7 +114,7 @@ ROOT =			/
 # to determine the distribution version
 # (it should look like OpenIndiana Hipster YYYY.MM).
 DISTRIBUTION_NAME = OpenIndiana Hipster
-DISTRIBUTION_VERSION = 2024.04
+DISTRIBUTION_VERSION = 2024.10
 # Native OS version
 OS_VERSION :=		$(shell uname -r)
 SOLARIS_VERSION =	$(OS_VERSION:5.%=2.%)
@@ -125,10 +125,13 @@ PKG_OS_VERSION ?= 0.$(PKG_SOLARIS_VERSION)
 # GNU target triplet
 GNU_TRIPLET=$(GNU_CPU)-$(GNU_VENDOR)-$(GNU_OS)
 # The cpu part of the triplet is basically the same as $(MACH):
-# i386 - for x86 and GCC version older than 9
-# x86_64 - for x86 and GCC version 9 and newer
-# sparc - for SPARC
+# i386/sparc     - for GCC version older than 9
+# x86_64/sparcv9 - for GCC version 9 and newer
+ifeq ($(MACH), i386)
 GNU_CPU = $(if $(filter $(GCC_VERSION),3 4 7),$(MACH),$(MACH:i386=x86_64))
+else
+GNU_CPU = $(if $(filter $(GCC_VERSION),3 4 7),$(MACH),$(MACH:sparc=sparcv9))
+endif
 # The vendor part of the triplet is:
 # pc - for x86
 # sun - for SPARC
@@ -470,6 +473,14 @@ INSTALL_64 =		$(BUILD_DIR_64)/.installed
 INSTALL_32_and_64 =	$(INSTALL_32) $(INSTALL_64)
 $(BUILD_DIR_32)/.installed:       BITS=32
 $(BUILD_DIR_64)/.installed:       BITS=64
+# If we are building both 32 and 64 bit then make sure we install in the
+# desired order: the preferred one last
+ifeq ($(strip $(BUILD_BITS)),64_and_32)
+$(INSTALL_64):	$(INSTALL_32)
+endif
+ifeq ($(strip $(BUILD_BITS)),32_and_64)
+$(INSTALL_32):	$(INSTALL_64)
+endif
 
 # set the default target for installation of the component
 COMPONENT_INSTALL_TARGETS =	install
@@ -641,6 +652,10 @@ GCC_DEFAULT =	13
 GCC_VERSION ?=	$(GCC_DEFAULT)
 GCC_ROOT =	/usr/gcc/$(GCC_VERSION)
 
+# If a component asked for non-default gcc version we need to make sure it is
+# installed
+USERLAND_REQUIRED_PACKAGES += $(if $(filter-out $(GCC_DEFAULT),$(GCC_VERSION)),developer/gcc-$(GCC_VERSION))
+
 # Define runtime package names to be used in dependencies
 GCC_RUNTIME_PKG =	system/library/gcc-$(GCC_VERSION)-runtime
 GXX_RUNTIME_PKG =	system/library/g++-$(GCC_VERSION)-runtime
@@ -696,9 +711,8 @@ LD =		/usr/bin/ld
 
 # Clang definitions (we only have 64 bit clang)
 CLANG_DEFAULT =		18
-CLANG_VERSION =		$(CLANG_DEFAULT)
-CLANG_FULL_VERSION =	$(CLANG_VERSION).1
-CLANG_PREFIX             = /usr/clang/$(CLANG_FULL_VERSION)
+CLANG_VERSION ?=	$(CLANG_DEFAULT)
+CLANG_PREFIX =		/usr/clang/$(CLANG_VERSION)
 CLANG_BINDIR =		$(CLANG_PREFIX)/bin
 CLANG_LIBDIR             = $(CLANG_PREFIX)/lib
 CLANG_DEVELOPER_PKG      = developer/clang-$(CLANG_VERSION)
@@ -706,6 +720,10 @@ CLANG_RUNTIME_PKG        = runtime/clang-$(CLANG_VERSION)
 REQUIRED_PACKAGES_SUBST += CLANG_DEVELOPER_PKG
 REQUIRED_PACKAGES_SUBST += CLANG_RUNTIME_PKG
 PATH.prepend +=		$(CLANG_BINDIR)
+
+# If a component asked for non-default clang version we need to make sure it is
+# installed
+USERLAND_REQUIRED_PACKAGES += $(if $(filter-out $(CLANG_DEFAULT),$(CLANG_VERSION)),$(CLANG_DEVELOPER_PKG))
 
 # Python definitions
 PYTHON.3.9.VENDOR_PACKAGES.64 = /usr/lib/python3.9/vendor-packages
@@ -1016,18 +1034,18 @@ MYSQL_CONFIG.64 =  $(MYSQL_BINDIR.64)/mysql_config
 MYSQL_CONFIG =     $(MYSQL_CONFIG.$(BITS))
 MYSQL_PKG_CONFIG_PATH =	$(MYSQL_LIBDIR)/pkgconfig
 PATH.prepend +=		$(MYSQL_BINDIR)
+PKG_CONFIG_PATH.prepend +=	$(MYSQL_PKG_CONFIG_PATH)
 
 PKG_MACROS +=   MYSQL_VERSION=$(MYSQL_VERSION)
 PKG_MACROS +=   MYSQL_VERNUM=$(MYSQL_VERNUM)
 PKG_MACROS +=   MYSQL_BASEPKG=$(MYSQL_BASEPKG)
 
 # Default libjpeg implementation layout
-JPEG_IMPLEM ?=     libjpeg8-turbo
-JPEG_HOME =        $(USRLIBDIR)/$(JPEG_IMPLEM)
-JPEG_BINDIR.32 =   $(JPEG_HOME)/bin
-JPEG_BINDIR.64 =   $(JPEG_HOME)/bin/$(MACH64)
-JPEG_BINDIR =      $(JPEG_BINDIR.$(BITS))
-JPEG_INCDIR =      $(USRINCDIR)/$(JPEG_IMPLEM)
+JPEG_DEFAULT =		8
+JPEG_VERSION ?=		$(JPEG_DEFAULT)
+JPEG_IMPLEM =		libjpeg$(JPEG_VERSION)-turbo
+JPEG_HOME =		$(if $(filter $(JPEG_DEFAULT),$(JPEG_VERSION)),$(USRDIR),$(USRLIBDIR)/$(JPEG_IMPLEM))
+JPEG_INCDIR =		$(if $(filter $(JPEG_DEFAULT),$(JPEG_VERSION)),$(USRINCDIR),$(USRINCDIR)/$(JPEG_IMPLEM))
 JPEG_LIBDIR.32 =   $(JPEG_HOME)/lib
 JPEG_LIBDIR.64 =   $(JPEG_HOME)/lib/$(MACH64)
 JPEG_LIBDIR =      $(JPEG_LIBDIR.$(BITS))
@@ -1042,6 +1060,8 @@ JPEG_LDFLAGS.32 =  -L$(JPEG_LIBDIR.32) -R$(JPEG_LIBDIR.32)
 JPEG_LDFLAGS.64 =  -L$(JPEG_LIBDIR.64) -R$(JPEG_LIBDIR.64)
 JPEG_LDFLAGS =     $(JPEG_LDFLAGS.$(BITS))
 
+PKG_CONFIG_PATH.prepend +=	$(if $(filter $(JPEG_DEFAULT),$(JPEG_VERSION)),,$(JPEG_LIBDIR)/pkgconfig)
+
 JPEG_IMPLEM_PKG = image/library/$(JPEG_IMPLEM)
 REQUIRED_PACKAGES_SUBST += JPEG_IMPLEM_PKG
 
@@ -1055,7 +1075,7 @@ TCLSH.8.6.sparc.64 =	/usr/bin/sparcv9/tclsh8.6
 TCLSH =		$(TCLSH.$(TCL_VERSION).$(MACH).$(BITS))
 
 # ICU library
-ICU_VERSION =			75
+ICU_VERSION =			76
 ICU_LIBRARY_PKG =		library/icu-$(ICU_VERSION)
 REQUIRED_PACKAGES_SUBST +=	ICU_LIBRARY_PKG
 
@@ -1144,6 +1164,8 @@ OPENSSL_PKG_CONFIG_PATH.64= $(OPENSSL_PREFIX)/lib/64/pkgconfig
 OPENSSL_PKG_CONFIG_PATH= $(OPENSSL_PKG_CONFIG_PATH.$(BITS))
 OPENSSL_INCDIR=$(OPENSSL_PREFIX)/include
 
+PKG_CONFIG_PATH.prepend +=	$(OPENSSL_PKG_CONFIG_PATH)
+
 # The OpenSSL 1.0 package is without the version suffix so it needs special handling
 OPENSSL_PKG =			library/security/openssl$(subst -10,,-$(subst .,,$(OPENSSL_VERSION)))
 REQUIRED_PACKAGES_SUBST +=	OPENSSL_PKG
@@ -1151,8 +1173,7 @@ REQUIRED_PACKAGES_SUBST +=	OPENSSL_PKG
 # Pkg-config paths
 PKG_CONFIG_PATH.32 = /usr/lib/pkgconfig
 PKG_CONFIG_PATH.64 = /usr/lib/$(MACH64)/pkgconfig
-PKG_CONFIG_PATH = \
-    $(OPENSSL_PKG_CONFIG_PATH):$(MYSQL_PKG_CONFIG_PATH):$(PKG_CONFIG_PATH.$(BITS)):$(PKG_CONFIG_PATH.32)
+PKG_CONFIG_PATH = $(subst $(space),:,$(strip $(PKG_CONFIG_PATH.prepend))):$(PKG_CONFIG_PATH.$(BITS)):$(PKG_CONFIG_PATH.32)
 
 # Set default path for environment modules
 MODULE_VERSION =	3.2.10

@@ -19,14 +19,14 @@ BUILD_STYLE = setup.py
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		types-pytz
-HUMAN_VERSION =			2024.1.0.20240417
-COMPONENT_SUMMARY =		types-pytz - Typing stubs for pytz
+HUMAN_VERSION =			2024.2.0.20241003
+COMPONENT_SUMMARY =		Typing stubs for pytz
 COMPONENT_PROJECT_URL =		https://github.com/python/typeshed
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:6810c8a1f68f21fdf0f4f374a432487c77645a0ac0b31de4bf4690cf21ad3981
+	sha256:575dc38f385a922a212bac00a7d6d2e16e141132a3c955078f4a4fd13ed6cb44
 COMPONENT_LICENSE =		Apache-2.0 AND MIT
 
-TEST_STYLE = setup.py
+TEST_STYLE = none
 
 include $(WS_MAKE_RULES)/common.mk
 

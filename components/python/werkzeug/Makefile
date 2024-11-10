@@ -19,10 +19,10 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		werkzeug
-HUMAN_VERSION =			3.0.3
+HUMAN_VERSION =			3.1.3
 COMPONENT_SUMMARY =		The comprehensive WSGI web application library.
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:097e5bfda9f0aba8da6b8545146def481d06aa7d3266e7448e2cccf67dd8bd18
+	sha256:60723ce945c19328679790e3282cc758aa4a6040e4bb330f53d30fa546d44746
 COMPONENT_LICENSE =		BSD-3-Clause
 COMPONENT_LICENSE_FILE =	LICENSE.txt
 
@@ -38,13 +38,10 @@ PYTHON_REQUIRED_PACKAGES += runtime/python
 TEST_REQUIRED_PACKAGES.python += library/python/cffi
 TEST_REQUIRED_PACKAGES.python += library/python/cryptography
 TEST_REQUIRED_PACKAGES.python += library/python/ephemeral-port-reserve
-TEST_REQUIRED_PACKAGES.python += library/python/greenlet
 TEST_REQUIRED_PACKAGES.python += library/python/iniconfig
 TEST_REQUIRED_PACKAGES.python += library/python/packaging
 TEST_REQUIRED_PACKAGES.python += library/python/pluggy
-TEST_REQUIRED_PACKAGES.python += library/python/psutil
 TEST_REQUIRED_PACKAGES.python += library/python/pycparser
 TEST_REQUIRED_PACKAGES.python += library/python/pytest
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-timeout
-TEST_REQUIRED_PACKAGES.python += library/python/pytest-xprocess
 TEST_REQUIRED_PACKAGES.python += library/python/watchdog

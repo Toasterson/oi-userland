@@ -14,23 +14,25 @@
 #   $WS_TOOLS/python-integrate-project zope.security
 #
 
-BUILD_STYLE = setup.py
+BUILD_STYLE = pyproject
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		zope.security
-HUMAN_VERSION =			7.0
+HUMAN_VERSION =			7.3
 COMPONENT_SUMMARY =		Zope Security Framework
 COMPONENT_PROJECT_URL =		http://github.com/zopefoundation/zope.security
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:6f4ef50b5bd40ccb9b22fb74f845fd0edf67e29dcf3233d923915959f94f16ff
+	sha256:5db5f79195321f2450ba49b3e1e47ba54364f966fdfc6d39df723043fe6c5549
 COMPONENT_LICENSE =		ZPL-2.1
 COMPONENT_LICENSE_FILE =	LICENSE.txt
+
+COMPONENT_SRC =			zope_security-$(HUMAN_VERSION)
 
 include $(WS_MAKE_RULES)/common.mk
 
 # Force no colors and more verbose output via tox posargs
-COMPONENT_TEST_TARGETS += -- -vv
+TOX_POSARGS += -vv
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/setuptools

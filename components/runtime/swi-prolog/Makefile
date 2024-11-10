@@ -18,13 +18,13 @@ USE_DEFAULT_TEST_TRANSFORMS= yes
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		swipl
-COMPONENT_VERSION=	9.2.5
+COMPONENT_VERSION=	9.2.8
 COMPONENT_SUMMARY=	Robust, mature, free. Prolog for the real world.
 COMPONENT_PROJECT_URL= https://www.swi-prolog.org
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_URL=	$(COMPONENT_PROJECT_URL)/download/stable/src/$(COMPONENT_ARCHIVE)
-COMPONENT_ARCHIVE_HASH=	sha256:b9f40771906c7e04be80ae4cfaa4463aeb44c52010a478edd8c7a4c022fe8781
+COMPONENT_ARCHIVE_HASH=	sha256:b331637a57c913c49edcfcb10ddcf6c031278ce93d2411d54542778531abb5c7
 COMPONENT_FMRI=		runtime/$(COMPONENT_NAME)
 COMPONENT_CLASSIFICATION=	Development/System
 COMPONENT_LICENSE=	BSD-2 license, others
@@ -38,7 +38,7 @@ COMPONENT_POST_UNPACK_ACTION= ( $(RM) -r $(COMPONENT_SRC)/packages/swipy )
 PCRE_INCLUDE=/usr/include/pcre
 
 CFLAGS += -D_POSIX_PTHREAD_SEMANTICS
-CFLAGS += $(XPG6MODE)
+CFLAGS += $(XPG8MODE)
 CFLAGS += -I$(PCRE_INCLUDE)
 CFLAGS += -I$(JAVA_HOME)/include/solaris
 
@@ -67,7 +67,6 @@ REQUIRED_PACKAGES += $(JPEG_IMPLEM_PKG)
 REQUIRED_PACKAGES += $(OPENSSL_PKG)
 REQUIRED_PACKAGES += $(READLINE_PKG)
 REQUIRED_PACKAGES += database/berkeleydb-5
-REQUIRED_PACKAGES += image/library/libjpeg-turbo
 REQUIRED_PACKAGES += library/gmp
 REQUIRED_PACKAGES += library/libarchive
 REQUIRED_PACKAGES += library/libedit
@@ -83,5 +82,7 @@ REQUIRED_PACKAGES += system/library/fontconfig
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libx11
 REQUIRED_PACKAGES += x11/library/libxft
+REQUIRED_PACKAGES += x11/library/libxinerama
 REQUIRED_PACKAGES += x11/library/libxpm
+REQUIRED_PACKAGES += x11/library/libxrandr
 REQUIRED_PACKAGES += x11/library/toolkit/libxt

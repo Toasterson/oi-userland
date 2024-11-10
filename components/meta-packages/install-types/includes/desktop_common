@@ -36,7 +36,6 @@ depend type=require fmri=driver/graphics/av1394
 depend type=require fmri=driver/graphics/dcam1394
 depend type=require fmri=driver/graphics/dcam1394/devfsadm-dcam1394
 depend type=require fmri=driver/graphics/usbvc
-depend type=require fmri=driver/x11/winlock
 depend type=require fmri=driver/x11/xsvc
 depend type=require fmri=gnome/gnome-keyring
 depend type=require fmri=gnome/help-viewer/yelp
@@ -94,7 +93,6 @@ depend type=require fmri=terminal/luit
 depend type=require fmri=terminal/xterm
 depend type=require fmri=web/browser/firefox
 depend type=require fmri=web/browser/w3m
-depend type=require fmri=web/data/firefox-bookmarks
 depend type=require fmri=x11/colormap-utilities
 depend type=require fmri=x11/compatibility/links-svid
 depend type=require fmri=x11/data/workspace-patterns

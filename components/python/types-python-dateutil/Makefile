@@ -19,14 +19,14 @@ BUILD_STYLE = setup.py
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		types-python-dateutil
-HUMAN_VERSION =			2.9.0.20240316
-COMPONENT_SUMMARY =		types-python-dateutil - Typing stubs for python-dateutil
+HUMAN_VERSION =			2.9.0.20241003
+COMPONENT_SUMMARY =		Typing stubs for python-dateutil
 COMPONENT_PROJECT_URL =		https://github.com/python/typeshed
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:5d2f2e240b86905e40944dd787db6da9263f0deabef1076ddaed797351ec0202
+	sha256:58cb85449b2a56d6684e41aeefb4c4280631246a0da1a719bdbe6f3fb0317446
 COMPONENT_LICENSE =		Apache-2.0 AND MIT
 
-TEST_STYLE = setup.py
+TEST_STYLE = none
 
 include $(WS_MAKE_RULES)/common.mk
 

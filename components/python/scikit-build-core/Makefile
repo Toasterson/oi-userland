@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		scikit_build_core
-HUMAN_VERSION =			0.10.2
+HUMAN_VERSION =			0.10.7
 COMPONENT_SUMMARY =		Build backend for CMake based projects
 COMPONENT_PROJECT_URL =		https://github.com/scikit-build/scikit-build-core
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:b3a1a95660cacb40c81bfc8c42937ab5d8d96b0d6ae4db4ea1382620505d00e2
+	sha256:04cbb59fe795202a7eeede1849112ee9dcbf3469feebd9b8b36aa541336ac4f8
 COMPONENT_LICENSE =		Apache-2.0
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -46,9 +46,6 @@ TEST_CONFLICTING_PACKAGES.python += library/python/numpy
 # DeprecationWarning.
 # See also https://bugs.launchpad.net/pbr/+bug/1822332
 TEST_CONFLICTING_PACKAGES.python += library/python/pbr
-
-# Random directory name
-COMPONENT_TEST_TRANSFORMS += "-e 's|/tmp/.*/garbage[^/]*|\$$(TMPDIR)|'"
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/exceptiongroup

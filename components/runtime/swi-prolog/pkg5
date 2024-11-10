@@ -1,7 +1,6 @@
 {
     "dependencies": [
         "database/berkeleydb-5",
-        "image/library/libjpeg-turbo",
         "image/library/libjpeg8-turbo",
         "library/gmp",
         "library/libarchive",
@@ -9,7 +8,7 @@
         "library/libyaml",
         "library/pcre2",
         "library/qt5",
-        "library/readline",
+        "library/readline-8",
         "library/security/openssl-31",
         "library/unixodbc",
         "library/zlib",
@@ -22,7 +21,9 @@
         "system/library/math",
         "x11/library/libx11",
         "x11/library/libxft",
+        "x11/library/libxinerama",
         "x11/library/libxpm",
+        "x11/library/libxrandr",
         "x11/library/toolkit/libxt"
     ],
     "fmris": [

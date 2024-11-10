@@ -19,11 +19,11 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		pydantic_core
-HUMAN_VERSION =			2.21.0
+HUMAN_VERSION =			2.26.0
 COMPONENT_SUMMARY =		Core functionality for Pydantic validation and serialization
 COMPONENT_PROJECT_URL =		https://github.com/pydantic/pydantic-core
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:79c747f9916e5b6cb588dfd994d9ac15a93e43eb07467d9e6f24d892c176bbf5
+	sha256:4578d4914bdbbd18963b4c611fa39d912d0dbeeffef8211fb546e45176a72d1d
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE
 
@@ -68,6 +68,7 @@ TEST_REQUIRED_PACKAGES.python += library/python/coverage
 TEST_REQUIRED_PACKAGES.python += library/python/dirty-equals
 TEST_REQUIRED_PACKAGES.python += library/python/exceptiongroup
 TEST_REQUIRED_PACKAGES.python += library/python/hypothesis
+TEST_REQUIRED_PACKAGES.python += library/python/inline-snapshot
 TEST_REQUIRED_PACKAGES.python += library/python/pytest
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-mock
 TEST_REQUIRED_PACKAGES.python += library/python/pytest-timeout

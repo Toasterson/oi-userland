@@ -19,13 +19,12 @@ BUILD_STYLE = makemaker
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_PERL_MODULE =		Crypt::OpenPGP
-HUMAN_VERSION =			1.12
-COMPONENT_REVISION =		1
+HUMAN_VERSION =			1.18
 COMPONENT_SUMMARY =		Crypt::OpenPGP - Pure-Perl OpenPGP implementation
-COMPONENT_CPAN_AUTHOR =		SROMANOV
+COMPONENT_CPAN_AUTHOR =		TIMLEGGE
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:e8a7ff2a993b76a69ad6dffdbe55755be5678b84e6ec494dcd9ab966f766f50e
-COMPONENT_LICENSE =		Artistic-1.0 OR GPL-1.0-or-later
+	sha256:e72931d39599be85b828599ab808d53854c904078a997dfa556d0d02c116b719
+COMPONENT_LICENSE =		Artistic-1.0-Perl OR GPL-1.0-or-later
 COMPONENT_LICENSE_FILE =	LICENSE
 
 include $(WS_MAKE_RULES)/common.mk
@@ -35,6 +34,7 @@ TEST_REQUIRED_PACKAGES.perl += library/perl-5/crypt-random
 
 # Auto-generated dependencies
 PERL_REQUIRED_PACKAGES += library/perl-5/alt-crypt-rsa-bigint
+PERL_REQUIRED_PACKAGES += library/perl-5/bytes-random-secure
 PERL_REQUIRED_PACKAGES += library/perl-5/crypt-blowfish
 PERL_REQUIRED_PACKAGES += library/perl-5/crypt-cast5_pp
 PERL_REQUIRED_PACKAGES += library/perl-5/crypt-des_ede3

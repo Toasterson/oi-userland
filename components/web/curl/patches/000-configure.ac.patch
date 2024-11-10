@@ -1,21 +1,30 @@
---- curl-7.60.0/configure.ac.1	2018-05-17 19:52:38.637214847 +0000
-+++ curl-7.60.0/configure.ac	2018-05-17 19:56:10.531967993 +0000
-@@ -1401,6 +1401,9 @@
-            *-hp-hpux*)
+Enable illumos gss support.  It is incorrectly assumed to be heimdal--do not add to libcurl.pc file
+--- curl-8.11.0/configure.ac.~1~	2024-11-06 02:09:19.000000000 -0500
++++ curl-8.11.0/configure.ac	2024-11-09 18:58:22.382807139 -0500
+@@ -2043,6 +2043,9 @@
+             *-hp-hpux*)
                gss_libname="gss"
                ;;
-+           *sunos*)
++            *sunos*)
 +              gss_libname="gss"
 +              ;;
-            *)
+             *)
                gss_libname="gssapi"
                ;;
-@@ -1422,7 +1425,7 @@
+@@ -2064,14 +2067,14 @@
          LIBS="-lgss $LIBS"
          ;;
-      *)
+       *)
 -        LIBS="-lgssapi $LIBS"
 +        LIBS="-lgss $LIBS"
          ;;
-      esac
+     esac
+   fi
+   if test -n "$gnu_gss"; then
+     LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE gss"
+   elif test "x$not_mit" = "x1"; then
+-    LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE heimdal-gssapi"
++    LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE"
+   else
+     LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE mit-krb5-gssapi"
    fi
