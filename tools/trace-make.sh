@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Trace all shell commands executed by make recipes and capture them to a log.
 # This is an opt-in wrapper that does not modify the default build.
 #

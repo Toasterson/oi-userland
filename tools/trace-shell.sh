@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Internal helper used by tools/trace-make.sh as the recipe shell for make.
 # It ensures that bash xtrace output goes to a dedicated file descriptor that
 # is not affected by per-recipe stdout/stderr redirections.
