@@ -6,10 +6,10 @@
 set -euo pipefail
 
 LOG_PATH=${TRACE_LOG:-trace.log}
-# Ensure directory exists
-LOG_DIR=$(dirname -- "$LOG_PATH")
-if [ -n "$LOG_DIR" ] && [ "$LOG_DIR" != "." ]; then
-  mkdir -p -- "$LOG_DIR"
+# Ensure directory exists (avoid external dirname)
+LOG_DIR=${LOG_PATH%/*}
+if [ "$LOG_DIR" != "$LOG_PATH" ]; then
+  /usr/bin/mkdir -p -- "$LOG_DIR"
 fi
 
 # Open FD 9 for appending to the trace log and direct bash xtrace there.

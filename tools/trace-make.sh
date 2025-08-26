@@ -26,19 +26,28 @@ else
 fi
 
 LOG_PATH=${TRACE_LOG:-trace.log}
-# Ensure directory exists if a path with directories is provided
-LOG_DIR=$(dirname -- "$LOG_PATH")
-if [ -n "$LOG_DIR" ] && [ "$LOG_DIR" != "." ]; then
-  mkdir -p -- "$LOG_DIR"
+# Ensure directory exists if a path with directories is provided (avoid external dirname)
+LOG_DIR=${LOG_PATH%/*}
+if [ "$LOG_DIR" != "$LOG_PATH" ]; then
+  /usr/bin/mkdir -p -- "$LOG_DIR"
 fi
 
 # Distinct, easily matchable PS4 prefix for xtrace lines (can be overridden by env)
 : "${PS4:=TRACE: }"
 export PS4
 
-# Absolute path to the tracing shell wrapper
-SCRIPT_DIR=$(cd "$(dirname -- "$0")" && pwd)
-TRACE_SHELL="$SCRIPT_DIR/trace-shell.sh"
+# Absolute path to the tracing shell wrapper (avoid external dirname/pwd)
+_script_path=${BASH_SOURCE[0]:-$0}
+case "$_script_path" in
+  */*) _script_dir=${_script_path%/*} ;;
+  *)   _script_dir=$PWD ;;
+esac
+# Make absolute if needed
+case "$_script_dir" in
+  /*) : ;;
+  *) _script_dir="$PWD/$_script_dir" ;;
+esac
+TRACE_SHELL="$_script_dir/trace-shell.sh"
 
 # Export TRACE_LOG so the shell wrapper writes to the correct file
 export TRACE_LOG="$LOG_PATH"

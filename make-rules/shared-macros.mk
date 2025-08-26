@@ -74,6 +74,10 @@ ifeq ($(origin WS_TOP), undefined)
 export WS_TOP := \
 	$(shell $(GIT) rev-parse --show-toplevel)
 endif
+# Fallback if git is unavailable or returned empty
+ifeq ($(strip $(WS_TOP)),)
+WS_TOP := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))..)
+endif
 
 USERLAND_ARCHIVES ?=	$(WS_TOP)/archives/
 WS_MACH =       $(WS_TOP)/$(MACH)
