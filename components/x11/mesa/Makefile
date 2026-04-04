@@ -46,9 +46,10 @@ X11_SERVERLIBS_DIR= /usr/lib/xorg
 CONFIGURE_OPTIONS += --libdir='lib/mesa/amd64'
 
 PKG_HARDLINKS += usr/lib/xorg/modules/dri/$(MACH64)/kms_swrast_dri.so
+PKG_HARDLINKS += usr/lib/xorg/modules/dri/$(MACH64)/virtio_gpu_dri.so
 
 # Command line options to GNU autoconf configure script
-CONFIGURE_OPTIONS += -Dgallium-drivers='swrast, i915, r600'
+CONFIGURE_OPTIONS += -Dgallium-drivers='swrast, i915, r600, virgl'
 CONFIGURE_OPTIONS += -Dvulkan-drivers=''
 CONFIGURE_OPTIONS += -Dgbm=enabled
 CONFIGURE_OPTIONS += -Dglvnd=false

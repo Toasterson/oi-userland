@@ -151,4 +151,5 @@ file path=usr/lib/xorg/modules/dri/$(MACH64)/i915_dri.so
 hardlink path=usr/lib/xorg/modules/dri/$(MACH64)/kms_swrast_dri.so target=i915_dri.so
 hardlink path=usr/lib/xorg/modules/dri/$(MACH64)/r600_dri.so target=i915_dri.so
 hardlink path=usr/lib/xorg/modules/dri/$(MACH64)/swrast_dri.so target=i915_dri.so
+hardlink path=usr/lib/xorg/modules/dri/$(MACH64)/virtio_gpu_dri.so target=i915_dri.so
 file path=usr/share/drirc.d/00-mesa-defaults.conf
