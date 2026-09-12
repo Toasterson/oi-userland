@@ -20,10 +20,14 @@ module warnings described below. Native compilation has also reproduced the
 `AT_FDCWD` signedness warning and continued past it. Compilation is in progress;
 packaging and runtime validation are not yet established by this fresh build.
 
-Earlier [Jenkins build 2](https://jenkins.openindiana.aurora-opencloud.org/job/OpenIndiana%20Organisation/job/oi-userland/job/PR-27386/2/console)
+[Jenkins build 2](https://jenkins.openindiana.aurora-opencloud.org/job/OpenIndiana%20Organisation/job/oi-userland/job/PR-27386/2/console)
 built and packaged Qt 6.11.2 successfully on 2026-08-22. Its warning counts are
 listed below. The latest [build 22](https://jenkins.openindiana.aurora-opencloud.org/job/OpenIndiana%20Organisation/job/oi-userland/job/PR-27386/22/console)
-reported success but built TimescaleDB, not Qt6; it is not fresh Qt validation.
+also built Qt6 successfully, after building several other components. It published
+`pkg://userland/library/qt6@6.11.2,5.11-2026.0.0.0:20260912T090645Z` and explicitly
+recorded return code 0 for the Qt6 step. Its merged source was
+`6587652097c6c873bdd8083a4b1414c5c657b957`. This is current CI build/package evidence,
+separate from this branch's independent two-job build and from installed runtime tests.
 
 ## Decisions before integration
 
@@ -42,7 +46,7 @@ reported success but built TimescaleDB, not Qt6; it is not fresh Qt validation.
 
 ## Compiler and linker warnings
 
-Jenkins build 2 emitted 68 compiler/linker warnings:
+Jenkins builds 2 and 22 each emitted the same 68 Qt6 compiler/linker warnings:
 
 | Count | Diagnostic | Proposed treatment |
 | ---: | --- | --- |
@@ -71,7 +75,7 @@ bundled Assimp; they are inherited issues, not newly introduced by this PR.
 
 ## Packaging warnings
 
-Jenkins build 2 also emitted:
+Jenkins builds 2 and 22 each also emitted the following Qt6 packaging warnings:
 
 - **398 `userland.action001.3` warnings** labelling `/usr/clang/21/lib` a 32-bit
   runpath. Native `file` and `elfdump -e` confirm that the installed libclang and
