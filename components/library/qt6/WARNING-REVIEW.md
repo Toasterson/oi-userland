@@ -16,8 +16,9 @@ changes to the build host's installed packages. Installation stages a prototype;
 publication targets the worktree's private IPS repository.
 
 Configuration has completed and reproduced the policy, bundled CMake and skipped
-module warnings described below. Compilation is in progress. Packaging and
-runtime validation are not yet established by this fresh build.
+module warnings described below. Native compilation has also reproduced the
+`AT_FDCWD` signedness warning and continued past it. Compilation is in progress;
+packaging and runtime validation are not yet established by this fresh build.
 
 Earlier [Jenkins build 2](https://jenkins.openindiana.aurora-opencloud.org/job/OpenIndiana%20Organisation/job/oi-userland/job/PR-27386/2/console)
 built and packaged Qt 6.11.2 successfully on 2026-08-22. Its warning counts are
@@ -99,8 +100,9 @@ Jenkins build 2 also emitted:
   will not add illumos support. State which modules are supported and explicitly
   skip unsupported ones where that preserves the intended package contents.
 - **QtWebView:** its optional WebEngine dependencies are unavailable, but the
-  current manifest ships WebView headers and a QML plugin. Confirm usable backend
-  behavior before promising support or dropping these APIs just to quiet warnings.
+  current manifest ships WebView headers and a QML plugin. The fresh native
+  configuration reports every WebView backend disabled. Document that limitation
+  and test consumers before promising support or dropping these APIs to quiet warnings.
 - **QtOpenAPI:** the new module is skipped for missing dependencies and its CLI
   generator is unavailable. Decide whether to support it or explicitly exclude
   it, then check generated manifests. Avoid environment-dependent module delivery.
