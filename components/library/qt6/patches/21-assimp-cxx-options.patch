@@ -1,0 +1,15 @@
+qt6: keep Assimp's C++ reorder option off C compilation
+
+The Qt3D Assimp target includes unzip C sources. Downstream CMake fix.
+
+--- a/qt3d/src/3rdparty/assimp/assimp.cmake
++++ b/qt3d/src/3rdparty/assimp/assimp.cmake
+@@ -334,7 +334,7 @@
+             "-Wno-unused-variable"
+             "-Wno-deprecated-declarations"
+             "-Wno-unused-function"
+-            "-Wno-reorder"
++            "$<$<COMPILE_LANGUAGE:CXX>:-Wno-reorder>"
+     )
+ 
+     qt_internal_extend_target(${target} CONDITION MSVC AND NOT QT_FEATURE_qt3d_system_assimp AND (NOT CMAKE_CROSSCOMPILING OR NOT host_build)
