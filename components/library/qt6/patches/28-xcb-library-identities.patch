@@ -1,0 +1,45 @@
+qt6: give repeated XCB libraries one CMake dependency identity
+
+XCB::AUX and XCB::UTIL both refer to libxcb-util, but CMake treats the imported
+UNKNOWN targets as distinct. XCB::IMAGE already requires AUX; use that target
+for the direct dependency too. Likewise canonicalize pkg-config's xkbcommon
+path to the XKB::XKB target used by QtGui, retaining the dependency itself.
+This complements dependency ordering: ordering alone cannot deduplicate distinct
+target identities for the same file. Downstream fix.
+
+--- a/qtbase/src/plugins/platforms/xcb/CMakeLists.txt
++++ b/qtbase/src/plugins/platforms/xcb/CMakeLists.txt
+@@ -51,7 +51,7 @@
+         Qt::GuiPrivate
+         XCB::CURSOR
+         XCB::ICCCM
+-        XCB::UTIL
++        XCB::AUX
+         XCB::IMAGE
+         XCB::KEYSYMS
+         XCB::RANDR
+--- a/qtbase/cmake/FindXKB_COMMON_X11.cmake
++++ b/qtbase/cmake/FindXKB_COMMON_X11.cmake
+@@ -5,6 +5,22 @@
+ 
+ pkg_check_modules(XKB_COMMON_X11 IMPORTED_TARGET "xkbcommon-x11>=0.4.1")
+ 
++# Use the same dependency target as QtGui instead of a second identity for the
++# very same library. Otherwise the Solaris linker sees xkbcommon twice.
++if(TARGET PkgConfig::XKB_COMMON_X11 AND TARGET XKB::XKB)
++    get_target_property(_xkbcommon_x11_libraries PkgConfig::XKB_COMMON_X11
++                        INTERFACE_LINK_LIBRARIES)
++    list(FIND _xkbcommon_x11_libraries "${XKB_LIBRARY}" _xkbcommon_index)
++    if(NOT _xkbcommon_index EQUAL -1)
++        list(REMOVE_ITEM _xkbcommon_x11_libraries "${XKB_LIBRARY}")
++        list(APPEND _xkbcommon_x11_libraries XKB::XKB)
++        set_property(TARGET PkgConfig::XKB_COMMON_X11 PROPERTY
++                     INTERFACE_LINK_LIBRARIES "${_xkbcommon_x11_libraries}")
++    endif()
++    unset(_xkbcommon_x11_libraries)
++    unset(_xkbcommon_index)
++endif()
++
+ if (NOT TARGET PkgConfig::XKB_COMMON_X11)
+     set(XKB_COMMON_X11_FOUND 0)
+ endif()
