@@ -36,9 +36,13 @@ separate from this branch's independent two-job build and from installed runtime
    still discover and encode runtime paths to the former.
 2. Coordinate rebuilds and smoke tests for Wireshark, VirtualBox, LibreOffice,
    SQLiteBrowser, qBittorrent, gnuplot and Poppler. Meson also declares Qt6 as a
-   test dependency. Confirm the actual reverse-dependency set in IPS before
-   releasing the transition. A successful Qt package build alone does not prove
-   that existing consumer binaries can find the new versioned directory.
+   test dependency. Live IPS repository and installed-image queries corroborate
+   these consumers; confirm the latest-version release closure before publishing
+   the transition. Read-only inspection of the installed gnuplot ELF binary shows
+   Qt6 NEEDED entries and `/usr/lib/qt/6.10/lib/amd64` in its RUNPATH/RPATH.
+   The directory transition therefore affects existing binaries as well as
+   recipe discovery. A successful Qt package build alone does not prove that
+   those consumers can find the new libraries.
 3. Agree an explicit Qt6 maintainer and backup, with responsibility for Solaris
    patches, bundled dependencies, supported modules and consumer rebuilds.
 4. Finish the native package build and review its complete diagnostics. Keep
