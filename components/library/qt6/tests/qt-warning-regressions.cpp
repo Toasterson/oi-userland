@@ -62,7 +62,13 @@ int main(int argc, char **argv) {
         datavis.setData("import QtQuick\nimport QtDataVisualization\nItem { property Theme3D theme: Theme3D {} }", QUrl());
         std::unique_ptr<QObject> view(datavis.create());
         check(view != nullptr, qPrintable(datavis.errorString()));
-        std::cout << "Trash, property-map bindings, shader conversions and DataVisualization import passed\n";
+        for (const char *name : {"Bars3D.qml", "Scatter3D.qml", "Surface3D.qml"}) {
+            const QUrl url(QStringLiteral("qrc:/qt-project.org/imports/QtDataVisualization/designer/default/")
+                           + QString::fromLatin1(name));
+            QQmlComponent designer(&engine, url);
+            check(designer.isReady(), qPrintable(designer.errorString()));
+        }
+        std::cout << "Trash, property-map bindings, shader conversions, DataVisualization import and designer compilation passed\n";
         return 0;
     } catch (const std::exception &error) {
         std::cerr << error.what() << '\n';
