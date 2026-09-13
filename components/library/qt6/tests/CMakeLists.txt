@@ -21,7 +21,7 @@ foreach(module qtquick3d qt3d)
     endif()
     add_executable(collada-${module} collada-regressions.cpp)
     target_include_directories(collada-${module} PRIVATE "${assimp}/include"
-        "${assimp}/code" "${assimp}/contrib/pugixml/src")
+        "${assimp}/code" "${assimp}/contrib/pugixml/src" "${assimp}/../..")
     target_link_libraries(collada-${module} PRIVATE
         "${QT_BUILD}/qtbase/plugins/amd64/${plugin}")
     add_test(NAME collada-${module} COMMAND collada-${module} "${CMAKE_CURRENT_SOURCE_DIR}/triangle.dae")
