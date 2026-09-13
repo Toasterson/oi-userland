@@ -77,6 +77,10 @@ CONFIGURE_OPTIONS += -plugin-system-sqlite
 CONFIGURE_OPTIONS += -no-pch
 CONFIGURE_OPTIONS += -no-gstreamer
 CONFIGURE_OPTIONS += -skip qtgrpc
+# WebEngine (including QtPdf) has no supported illumos platform. OpenAPI has no
+# supported generator/dependency setup here. Keep delivery deterministic.
+CONFIGURE_OPTIONS += -skip qtwebengine
+CONFIGURE_OPTIONS += -skip qtopenapi
 CONFIGURE_OPTIONS += CMAKE_PREFIX_PATH="$(BUILD_DIR)/$(MACH64)/qtbase/lib/$(MACH64)/cmake"
 CONFIGURE_OPTIONS += MySQL_LIBRARY=$(MYSQL_LIBDIR)/libmysqlclient.so
 CONFIGURE_OPTIONS += MySQL_INCLUDE_DIR=$(MYSQL_INCDIR)
