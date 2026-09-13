@@ -560,18 +560,23 @@ REQUIRED_PACKAGES::     $(RESOLVED) $(REQUIRED_PACKAGES_RESOLVED) $(BUILD_DIR)/f
 	@echo "*** Please edit your Makefile and verify the new or updated content at the end ***"
 
 
+# A reference URI is opt-in. Passing -c alone creates an empty cache and skips
+# obsolete-dependency checks; -r populates/refreshes it without changing the
+# installed image. CANONICAL_REPO may contain multiple whitespace-separated URIs.
+PKGLINT_REFERENCE_OPTIONS = $(if $(strip $(CANONICAL_REPO)),-c $(WS_LINT_CACHE) $(CANONICAL_REPO:%=-r %))
+
 # lint the manifests all at once
 $(BUILD_DIR)/.linted-$(MACH):	$(BUILD_DIR)/.resolved-$(MACH)
 	@echo "VALIDATING MANIFEST CONTENT: $(RESOLVED)"
 	$(ENV) PYTHONPATH=$(WS_TOOLS)/python PROTO_PATH="$(PKG_PROTO_DIRS)" $(COMPONENT_PKGLINT_ENV)\
-		$(PKGLINT) $(CANONICAL_REPO:%=-c $(WS_LINT_CACHE)) \
+		$(PKGLINT) $(PKGLINT_REFERENCE_OPTIONS) \
 			-f $(WS_TOOLS)/pkglintrc $(RESOLVED)
 	$(TOUCH) $@
 
 lintme: FRC
 	@echo "VALIDATING MANIFEST CONTENT: $(RESOLVED)"
 	$(ENV) PYTHONPATH=$(WS_TOOLS)/python PROTO_PATH="$(PKG_PROTO_DIRS)" $(COMPONENT_PKGLINT_ENV)\
-		$(PKGLINT) $(CANONICAL_REPO:%=-c $(WS_LINT_CACHE)) \
+		$(PKGLINT) $(PKGLINT_REFERENCE_OPTIONS) \
 			-f $(WS_TOOLS)/pkglintrc $(RESOLVED)
 
 FRC:
