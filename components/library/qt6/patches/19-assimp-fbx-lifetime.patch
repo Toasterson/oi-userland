@@ -1,0 +1,38 @@
+qt6: annotate the lifetime of Assimp FBX scope lookups
+
+GetRequiredElement returns an Element owned by sc, never the temporary lookup
+string. GCC 14 supports no_dangling; feature-test it for other compilers.
+This applies only to the lookup function, leaving other diagnostics enabled.
+https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/C_002b_002b-Attributes.html
+https://github.com/assimp/assimp/issues/5145#issuecomment-1599436595
+
+--- a/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/FBX/FBXParser.h
++++ b/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/FBX/FBXParser.h
+@@ -223,6 +223,12 @@
+ bool HasElement( const Scope& sc, const std::string& index );
+ 
+ // extract a required element from a scope, abort if the element cannot be found
++// The result belongs to sc, not to the temporary lookup string.
++#if defined(__has_cpp_attribute)
++#  if __has_cpp_attribute(gnu::no_dangling)
++[[gnu::no_dangling]]
++#  endif
++#endif
+ const Element &GetRequiredElement(const Scope &sc, const std::string &index, const Element *element = nullptr);
+ 
+ // extract required compound scope
+--- a/qt3d/src/3rdparty/assimp/src/code/AssetLib/FBX/FBXParser.h
++++ b/qt3d/src/3rdparty/assimp/src/code/AssetLib/FBX/FBXParser.h
+@@ -223,6 +223,12 @@
+ bool HasElement( const Scope& sc, const std::string& index );
+ 
+ // extract a required element from a scope, abort if the element cannot be found
++// The result belongs to sc, not to the temporary lookup string.
++#if defined(__has_cpp_attribute)
++#  if __has_cpp_attribute(gnu::no_dangling)
++[[gnu::no_dangling]]
++#  endif
++#endif
+ const Element &GetRequiredElement(const Scope &sc, const std::string &index, const Element *element = nullptr);
+ 
+ // extract required compound scope
