@@ -1,0 +1,16 @@
+qt6: compare the trash directory sentinel as a file descriptor
+
+illumos defines AT_FDCWD as an unsigned constant; openat/mkdirat take int.
+Use the same conversion for the comparison as for those calls. Downstream fix.
+
+--- a/qtbase/src/corelib/io/qfilesystemengine_unix.cpp
++++ b/qtbase/src/corelib/io/qfilesystemengine_unix.cpp
+@@ -1483,7 +1483,7 @@
+     QSystemError getTrashDir(int parentfd, QString targetDir, const QFileSystemEntry &source,
+                              int openmode)
+     {
+-        if (parentfd == AT_FDCWD)
++        if (parentfd == int(AT_FDCWD))
+             trashPath = targetDir;
+         QByteArray nativePath = QFile::encodeName(targetDir);
+ 
