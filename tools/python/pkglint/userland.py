@@ -74,6 +74,8 @@ class UserlandActionChecker(base.ActionChecker):
                         re.compile('^\$ORIGIN/')
                 ]
                 self.runpath_64_re = [
+                        # OpenIndiana ships only 64-bit Clang libraries here.
+                        re.compile(r"^/usr/clang/[1-9][0-9]*/lib/?$"),
                         re.compile('^.*/64(/.*)?$'),
                         re.compile('^.*/amd64(/.*)?$'),
                         re.compile('^.*/sparcv9(/.*)?$'),
