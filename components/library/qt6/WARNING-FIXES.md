@@ -14,7 +14,7 @@ commits on this fork branch. These changes have not been merged upstream.
 | Deprecated QStringBuilder pointer concatenation | [22-qmltc-string-literals.patch](patches/22-qmltc-string-literals.patch) preserves QString type across the conditional. |
 | Deprecated Qt3D QJSValue probe | [23-qt3d-js-variant.patch](patches/23-qt3d-js-variant.patch) converts native values and arrays while retaining arbitrary JS object identity. |
 | Deprecated Effect Maker property-map constructors | [24-effectmaker-property-maps.patch](patches/24-effectmaker-property-maps.patch) uses the supported factory with explicit ownership. |
-| Repeated XCB and DRM libraries | [25-xcb-egl-link-order.patch](patches/25-xcb-egl-link-order.patch) lets CMake order and deduplicate direct/transitive dependencies within the two affected Solaris platform directories. Requires CMake 3.31 or newer; older CMake retains its previous behavior. |
+| Repeated XCB and DRM libraries | [25-xcb-egl-link-order.patch](patches/25-xcb-egl-link-order.patch) lets CMake order and deduplicate direct/transitive dependencies within the two affected Solaris platform directories. Requires CMake 3.31 or newer; older CMake retains its previous behavior. [28-xcb-library-identities.patch](patches/28-xcb-library-identities.patch) also unifies the AUX/UTIL and xkbcommon dependency identities. |
 | QTP0004 | [26-datavisualization-qml-policy.patch](patches/26-datavisualization-qml-policy.patch) enables the policy locally; both new designer `qmldir` redirects are included in the manifests. |
 | Gumbo CMake compatibility | [27-gumbo-cmake-minimum.patch](patches/27-gumbo-cmake-minimum.patch) adopts upstream's 3.11 minimum. |
 | Clang's library path misclassified as 32-bit | The pkglint runpath rule recognizes the exact versioned Clang layout and checks it in both directions; similar paths receive no exemption. |
@@ -32,13 +32,17 @@ on numeric shader conversion. This establishes that the tests distinguish the
 old behavior. The baseline trash and property-map binding checks passed before
 that Qt test reached the shader failure.
 
-An incremental native rebuild is in progress using the original prepared source
-and completed build tree, the new tracked patches, and `PARALLEL_JOBS=2`.
-The recipe's configure actions run again while preserving object files; the
-ordinary build, fresh prototype staging and private publication follow.
-The test and manifest additions after the initial source commit do not change
-Qt's compiled source. Final build, regression, loader and reference-lint results
-will be recorded here when complete.
+A native rebuild is in progress with `PARALLEL_JOBS=2`. All 19 modified source
+files match independently applied tracked patches. A first incremental pass was
+stopped to add the XCB dependency-identity fix. The subsequent standard recipe
+recreated the build directory, so the final pass is a full compilation using the
+prepared patched sources. Original package/prototype evidence is preserved.
+Fresh prototype staging and private publication follow compilation.
+
+Opt-in reference lint passed with no warnings against the baseline manifest
+using a newly populated Hipster catalog (10,626 reference manifests). It will be
+rerun against the final resolved manifest, including the two new qmldir files.
+Final build, regression, loader and reference-lint results remain pending.
 
 Consumer rebuilds, installed desktop/rendering tests, maintainer/backup agreement
 and SPARC results remain release requirements. Revision bumps and support notes

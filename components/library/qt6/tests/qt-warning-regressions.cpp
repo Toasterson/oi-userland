@@ -7,6 +7,7 @@
 #include <QQmlEngine>
 #include <QQmlPropertyMap>
 #include <QTemporaryDir>
+#include <QVector3D>
 #include <Qt3DQuickRender/private/quick3dshaderdata_p.h>
 #include <Qt3DRender/private/qshaderdata_p.h>
 #include <iostream>
@@ -55,6 +56,8 @@ int main(int argc, char **argv) {
         check(read(engine.evaluate("[1, 2, 3]")).toList().size() == 3, "shader array conversion failed");
         check(read(engine.evaluate("42")).toInt() == 42, "shader number conversion failed");
         check(read(engine.evaluate("true")).toBool(), "shader bool conversion failed");
+        const QVector3D vector(1.0f, 2.0f, 3.0f);
+        check(read(engine.toScriptValue(vector)).value<QVector3D>() == vector, "shader vector conversion failed");
         auto jsObject = engine.evaluate("({ answer: 42 })");
         check(read(jsObject).value<QJSValue>().strictlyEquals(jsObject), "shader JS object identity lost");
 
