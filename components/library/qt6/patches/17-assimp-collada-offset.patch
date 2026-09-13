@@ -1,0 +1,32 @@
+qt6: backport Assimp's width-safe Collada offset parsing
+
+Upstream: https://github.com/assimp/assimp/commit/16c50d7b53b5b6536599135004fb003c5e6f88b8
+Writing an unsigned int through a size_t reference violates aliasing rules and
+writes the wrong half on big-endian 64-bit targets. Apply to both bundled copies.
+
+--- a/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
++++ b/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
+@@ -1723,7 +1723,9 @@
+ 
+     // read index offset, if per-index <input>
+     if (XmlParser::hasAttribute(node, "offset")) {
+-        XmlParser::getUIntAttribute(node, "offset", (unsigned int &)channel.mOffset);
++        unsigned int offsetValue = 0;
++        XmlParser::getUIntAttribute(node, "offset", offsetValue);
++        channel.mOffset = offsetValue;
+     }
+ 
+     // read set if texture coordinates
+--- a/qt3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
++++ b/qt3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
+@@ -1723,7 +1723,9 @@
+ 
+     // read index offset, if per-index <input>
+     if (XmlParser::hasAttribute(node, "offset")) {
+-        XmlParser::getUIntAttribute(node, "offset", (unsigned int &)channel.mOffset);
++        unsigned int offsetValue = 0;
++        XmlParser::getUIntAttribute(node, "offset", offsetValue);
++        channel.mOffset = offsetValue;
+     }
+ 
+     // read set if texture coordinates
