@@ -22,7 +22,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		poppler
 COMPONENT_VERSION=	26.2.0
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	2
 HUMAN_VERSION=		26.02.0
 COMPONENT_SUMMARY=	Poppler is a PDF rendering library based on the xpdf-3.0 code base
 COMPONENT_PROJECT_URL=	https://poppler.freedesktop.org

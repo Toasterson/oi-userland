@@ -16,6 +16,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         sqlitebrowser
 COMPONENT_VERSION=      3.13.1
+COMPONENT_REVISION=	1
 COMPONENT_SUMMARY=      DB browser for sqlite3
 COMPONENT_PROJECT_URL=  https://sqlitebrowser.org
 COMPONENT_FMRI=         desktop/application/$(COMPONENT_NAME)

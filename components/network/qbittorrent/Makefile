@@ -18,6 +18,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		qbittorrent
 COMPONENT_VERSION=	5.0.5
+COMPONENT_REVISION=	1
 COMPONENT_SUMMARY=	Qt cross-platform application and UI framework
 COMPONENT_PROJECT_URL=	https://www.qbittorrent.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
