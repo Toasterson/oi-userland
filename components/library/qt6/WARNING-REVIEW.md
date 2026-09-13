@@ -5,8 +5,9 @@ head `e54c6f0ce96856ff135f5a3a3a05e4f860e9547b`, on 2026-09-12, with PR status
 refreshed on 2026-09-13. It remains an open draft at the same head with Jenkins
 build 22 green. No other open Qt6 update was found in the PR inventory.
 This branch carries that change on oi/hipster base `0b99d895e5`, with its author
-and cherry-pick provenance preserved. This document records proposals, not applied
-warning fixes or an upstream merge approval.
+and cherry-pick provenance preserved. This document records the baseline investigation. The follow-up
+[WARNING-FIXES.md](WARNING-FIXES.md) lists the applied patches and their validation;
+neither document is an upstream merge approval.
 
 ## Build evidence
 
