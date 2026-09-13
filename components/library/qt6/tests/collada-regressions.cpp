@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
         const aiMesh *mesh = scene->mMeshes[0];
         check(mesh->mNumVertices == 3 && mesh->mNumFaces == 1, "triangle indices were corrupted");
         check(mesh->mVertices[1].x == 1.0f && mesh->mVertices[2].y == 1.0f, "vertex offset decoding failed");
-        check(mesh->HasTextureCoords(0) && mesh->mTextureCoords[0][1].x == 1.0f, "texture offset decoding failed");
+        check(mesh->HasTextureCoords(0) && mesh->mTextureCoords[0][0].y == 1.0f && mesh->mTextureCoords[0][1].x == 0.0f, "texture offset decoding failed");
         aiReleaseImport(scene);
         std::cout << "Collada offsets, semantic names, input sets and import passed\n";
         return 0;
