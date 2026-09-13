@@ -1,0 +1,21 @@
+qt6: convert shader values without deprecated QJSValue probes
+
+Convert arrays to lists and native values to QVariant. Retain arbitrary JS
+objects as QJSValue, preserving their identity instead of flattening to maps.
+https://doc.qt.io/qt-6/qjsvalue-obsolete.html
+
+--- a/qt3d/src/quick3d/quick3drender/items/quick3dshaderdata.cpp
++++ b/qt3d/src/quick3d/quick3drender/items/quick3dshaderdata.cpp
+@@ -34,11 +34,8 @@
+         if (v.userType() == qjsValueTypeId) {
+             QJSValue jsValue = v.value<QJSValue>();
+             if (jsValue.isArray())
+-                return v.value<QVariantList>();
+-#if QT_DEPRECATED_SINCE(6, 9)
+-            else if (jsValue.isVariant())
+                 return jsValue.toVariant();
+-#endif
++            return jsValue.toVariant(QJSValue::RetainJSObjects);
+         } else if (v.userType() == quick3DShaderDataArrayTypeId) {
+             Quick3DShaderDataArray *array = v.value<Quick3DShaderDataArray *>();
+             QVariantList innerValues;
