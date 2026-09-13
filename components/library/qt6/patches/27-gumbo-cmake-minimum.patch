@@ -1,0 +1,14 @@
+qt6: adopt upstream Gumbo's CMake 3.11 minimum
+
+Upstream litehtml uses 3.11 for this bundled subproject. Qt itself requires a
+newer CMake. This removes the obsolete pre-3.10 policy compatibility request.
+https://github.com/litehtml/litehtml/blob/master/src/gumbo/CMakeLists.txt
+
+--- a/qttools/src/assistant/qlitehtml/src/3rdparty/litehtml/src/gumbo/CMakeLists.txt
++++ b/qttools/src/assistant/qlitehtml/src/3rdparty/litehtml/src/gumbo/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.11)
+ 
+ project(gumbo C)
+ 
