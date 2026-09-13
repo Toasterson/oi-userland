@@ -1,0 +1,52 @@
+qt6: parse Collada material input semantics as names
+
+Use the existing semantic decoder for bind_vertex_input, as for geometry inputs.
+Remove the duplicated parse and both enum-to-unsigned-int reference casts.
+Applies to the QtQuick3D and Qt3D bundled copies; downstream fix.
+
+--- a/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
++++ b/qtquick3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
+@@ -2220,16 +2220,13 @@
+             Collada::InputSemanticMapEntry vn;
+ 
+             // effect semantic
+-            if (XmlParser::hasAttribute(currentNode, "semantic")) {
+-                std::string s;
+-                XmlParser::getStdStrAttribute(currentNode, "semantic", s);
+-                XmlParser::getUIntAttribute(currentNode, "input_semantic", (unsigned int &)vn.mType);
+-            }
+             std::string s;
+             XmlParser::getStdStrAttribute(currentNode, "semantic", s);
+ 
+-            // input semantic
+-            XmlParser::getUIntAttribute(currentNode, "input_semantic", (unsigned int &)vn.mType);
++            // input_semantic is a name such as TEXCOORD, not an integer.
++            std::string inputSemantic;
++            XmlParser::getStdStrAttribute(currentNode, "input_semantic", inputSemantic);
++            vn.mType = GetTypeForSemantic(inputSemantic);
+ 
+             // index of input set
+             if (XmlParser::hasAttribute(currentNode, "input_set")) {
+--- a/qt3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
++++ b/qt3d/src/3rdparty/assimp/src/code/AssetLib/Collada/ColladaParser.cpp
+@@ -2220,16 +2220,13 @@
+             Collada::InputSemanticMapEntry vn;
+ 
+             // effect semantic
+-            if (XmlParser::hasAttribute(currentNode, "semantic")) {
+-                std::string s;
+-                XmlParser::getStdStrAttribute(currentNode, "semantic", s);
+-                XmlParser::getUIntAttribute(currentNode, "input_semantic", (unsigned int &)vn.mType);
+-            }
+             std::string s;
+             XmlParser::getStdStrAttribute(currentNode, "semantic", s);
+ 
+-            // input semantic
+-            XmlParser::getUIntAttribute(currentNode, "input_semantic", (unsigned int &)vn.mType);
++            // input_semantic is a name such as TEXCOORD, not an integer.
++            std::string inputSemantic;
++            XmlParser::getStdStrAttribute(currentNode, "input_semantic", inputSemantic);
++            vn.mType = GetTypeForSemantic(inputSemantic);
+ 
+             // index of input set
+             if (XmlParser::hasAttribute(currentNode, "input_set")) {
