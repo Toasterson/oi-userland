@@ -1,0 +1,17 @@
+qt6: keep qmltc list type prefixes as QString values
+
+The conditional decays UTF-16 literals to pointers. QStringLiteral avoids the
+deprecated pointer concatenation without changing the generated type name.
+
+--- a/qtdeclarative/src/qmltc/qqmltcpropertyutils_p.h
++++ b/qtdeclarative/src/qmltc/qqmltcpropertyutils_p.h
+@@ -35,7 +35,8 @@
+         // We cannot just use p.type()->internalName() here because it may be
+         // a list property of something that only receives a C++ name from qmltc.
+         const QQmlJSScope::ConstPtr elementType = p.type()->elementType();
+-        return (elementType->isReferenceType() ? u"QQmlListProperty<" : u"QList<")
++        return (elementType->isReferenceType() ? QStringLiteral("QQmlListProperty<")
++                                               : QStringLiteral("QList<"))
+                 + elementType->internalName() + u'>';
+     }
+ 
