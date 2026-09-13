@@ -1,0 +1,205 @@
+qt6: construct Effect Maker property maps through the Qt factory
+
+Use QQmlPropertyMap::create with explicit unique_ptr ownership. Contexts borrow
+the same maps and dynamic key insertion stays unchanged.
+https://doc.qt.io/qt-6/qqmlpropertymap.html
+
+--- a/qtquickeffectmaker/tools/qqem/effectmanager.h
++++ b/qtquickeffectmaker/tools/qqem/effectmanager.h
+@@ -8,6 +8,7 @@
+ #include <QTemporaryFile>
+ #include <QTimer>
+ #include <QQmlPropertyMap>
++#include <memory>
+ #include <QFileSystemWatcher>
+ #include "uniformmodel.h"
+ #include "nodeview.h"
+@@ -22,7 +23,7 @@
+ const int EFFECT_UPDATE_DELAY = 200;
+ 
+ // This will be used for commandline arguments.
+-extern QQmlPropertyMap g_argData;
++extern std::unique_ptr<QQmlPropertyMap> g_argData;
+ 
+ struct EffectError {
+     Q_GADGET
+--- a/qtquickeffectmaker/tools/qqem/propertyhandler.h
++++ b/qtquickeffectmaker/tools/qqem/propertyhandler.h
+@@ -5,9 +5,10 @@
+ #define PROPERTYHANDLER_H
+ 
+ #include <QQmlPropertyMap>
++#include <memory>
+ 
+ // This will be used for binding dynamic properties
+ // changes between C++ and QML.
+-extern QQmlPropertyMap g_propertyData;
++extern std::unique_ptr<QQmlPropertyMap> g_propertyData;
+ 
+ #endif // PROPERTYHANDLER_H
+--- a/qtquickeffectmaker/tools/qqem/effectmanager.cpp
++++ b/qtquickeffectmaker/tools/qqem/effectmanager.cpp
+@@ -15,7 +15,7 @@
+ #include <QtQml/qqmlfile.h>
+ #include <QXmlStreamWriter>
+ 
+-QQmlPropertyMap g_argData;
++std::unique_ptr<QQmlPropertyMap> g_argData(QQmlPropertyMap::create());
+ 
+ enum class FileType
+ {
+@@ -888,8 +888,8 @@
+         s += "        id: blurHelper\n";
+         s += "        anchors.fill: parent\n";
+         int blurMax = 32;
+-        if (g_propertyData.contains("BLUR_HELPER_MAX_LEVEL"))
+-            blurMax = g_propertyData["BLUR_HELPER_MAX_LEVEL"].toInt();
++        if (g_propertyData->contains("BLUR_HELPER_MAX_LEVEL"))
++            blurMax = (*g_propertyData)["BLUR_HELPER_MAX_LEVEL"].toInt();
+         s += QString("        property int blurMax: %1\n").arg(blurMax);
+         s += "        property real blurMultiplier: rootItem.blurMultiplier\n";
+         s += "    }\n";
+@@ -1036,18 +1036,18 @@
+ {
+     bool projectOpened = false;
+     QString overrideExportPath;
+-    if (g_argData.contains("export_path")) {
++    if (g_argData->contains("export_path")) {
+         // Set export path first, so it gets saved if new project is created
+-        overrideExportPath = g_argData.value("export_path").toString();
++        overrideExportPath = g_argData->value("export_path").toString();
+         m_exportDirectory = overrideExportPath;
+     }
+ 
+-    if (g_argData.contains("effects_project_path")) {
++    if (g_argData->contains("effects_project_path")) {
+         // Open or create project given as commandline parameter
+-        QString projectFile = g_argData.value("effects_project_path").toString();
++        QString projectFile = g_argData->value("effects_project_path").toString();
+         QString currentPath = QDir::currentPath();
+         QString fullFilePath = relativeToAbsolutePath(projectFile, currentPath);
+-        bool createProject = g_argData.contains("create_project");
++        bool createProject = g_argData->contains("create_project");
+         if (createProject) {
+             QFileInfo fi(fullFilePath);
+             projectOpened = newProject(fi.path(), fi.baseName(), true, false);
+@@ -1408,7 +1408,7 @@
+                     u.exportImage = getBoolValue(propertyObject["exportImage"], true);
+                 // Update the mipmap property
+                 QString mipmapProperty = mipmapPropertyName(u.name);
+-                g_propertyData[mipmapProperty] = u.enableMipmap;
++                (*g_propertyData)[mipmapProperty] = u.enableMipmap;
+             }
+             if (propertyObject.contains("value")) {
+                 value = propertyObject["value"].toString();
+--- a/qtquickeffectmaker/tools/qqem/propertyhandler.cpp
++++ b/qtquickeffectmaker/tools/qqem/propertyhandler.cpp
+@@ -3,4 +3,4 @@
+ 
+ #include "propertyhandler.h"
+ 
+-QQmlPropertyMap g_propertyData;
++std::unique_ptr<QQmlPropertyMap> g_propertyData(QQmlPropertyMap::create());
+--- a/qtquickeffectmaker/tools/qqem/main.cpp
++++ b/qtquickeffectmaker/tools/qqem/main.cpp
+@@ -60,14 +60,14 @@
+     // Parsing args
+     if (args.count() > 0) {
+         QString projectPath = QDir::fromNativeSeparators(args.at(0));
+-        g_argData.insert("effects_project_path", projectPath);
++        g_argData->insert("effects_project_path", projectPath);
+     }
+     if (cmdLineParser.isSet(exportPathOption)) {
+         // Switch to QDS mode when the exportPath is given.
+         isQDSMode = true;
+         auto val = cmdLineParser.value(exportPathOption);
+         QString exportPath = QDir::fromNativeSeparators(val);
+-        g_argData.insert("export_path", exportPath);
++        g_argData->insert("export_path", exportPath);
+     }
+     bool createProject = cmdLineParser.isSet(createOption);
+     if (createProject) {
+@@ -75,7 +75,7 @@
+             qWarning("Error: Creating a new project requires also the project parameter.");
+             exit(1);
+         }
+-        g_argData.insert("create_project", createProject);
++        g_argData->insert("create_project", createProject);
+     }
+ 
+     qmlRegisterType<EffectManager>("QQEMLib", 1, 0, "EffectManager");
+@@ -87,8 +87,8 @@
+     QQmlApplicationEngine engine;
+     QQmlContext *context = engine.rootContext();
+     if (context) {
+-        context->setContextProperty("g_argData", &g_argData);
+-        context->setContextProperty("g_propertyData", &g_propertyData);
++        context->setContextProperty("g_argData", g_argData.get());
++        context->setContextProperty("g_propertyData", g_propertyData.get());
+         context->setContextProperty("buildQtVersion", QLatin1String(QT_VERSION_STR));
+         context->setContextProperty("qdsMode", isQDSMode);
+     } else {
+--- a/qtquickeffectmaker/tools/qqem/uniformmodel.cpp
++++ b/qtquickeffectmaker/tools/qqem/uniformmodel.cpp
+@@ -266,7 +266,7 @@
+     if (role == Value) {
+         // Don't update uniforms when value is changed, as those
+         // go through g_propertyData
+-        g_propertyData.insert(uniform.name, value);
++        g_propertyData->insert(uniform.name, value);
+         if (m_effectManager)
+             m_effectManager->setUnsavedChanges(true);
+     }
+@@ -380,14 +380,14 @@
+             uniform.defaultValue = "";
+         // Update the mipmap property
+         QString mipmapProperty = m_effectManager->mipmapPropertyName(uniform.name);
+-        g_propertyData[mipmapProperty] = enableMipmap;
++        (*g_propertyData)[mipmapProperty] = enableMipmap;
+         break;
+     }
+ 
+     if (addNewRow) {
+         // When adding a property, value is default value
+         uniform.value = uniform.defaultValue;
+-        g_propertyData.insert(uniform.name, uniform.value);
++        g_propertyData->insert(uniform.name, uniform.value);
+         // Note: NodeId is only updated when adding new property
+         // Properties can't be moved to other nodes
+         uniform.nodeId = nodeId;
+@@ -402,7 +402,7 @@
+         }
+     } else {
+         if (!uniform.useCustomValue)
+-            g_propertyData.insert(uniform.name, uniform.value);
++            g_propertyData->insert(uniform.name, uniform.value);
+         Q_EMIT dataChanged(QAbstractItemModel::createIndex(rowIndex, 0),
+                            QAbstractItemModel::createIndex(rowIndex, 0));
+     }
+@@ -418,7 +418,7 @@
+     auto index = QAbstractItemModel::createIndex(rowIndex, 0);
+     setData(index, uniform.defaultValue, Value);
+ 
+-    g_propertyData.insert(uniform.name, uniform.defaultValue);
++    g_propertyData->insert(uniform.name, uniform.defaultValue);
+ 
+     emit dataChanged(index, index, {Value});
+ 
+@@ -436,7 +436,7 @@
+     auto &uniform = (*m_uniformTable)[rowIndex];
+     uniform.value = value.toString();
+ 
+-    g_propertyData.insert(uniform.name, value);
++    g_propertyData->insert(uniform.name, value);
+ 
+     emit dataChanged(QAbstractItemModel::createIndex(0, 0),
+                      QAbstractItemModel::createIndex(rowIndex, 0));
+@@ -815,7 +815,7 @@
+     uniform->maxValue = maxValue.isEmpty() ? getInitializedVariant(uniform->type, true) : valueStringToVariant(uniform->type, maxValue);
+ 
+     // Update the value data in bindings
+-    g_propertyData.insert(uniform->name, uniform->value);
++    g_propertyData->insert(uniform->name, uniform->value);
+ }
+ 
+ UniformModel::Uniform::Type UniformModel::typeFromString(const QString &typeString) const
