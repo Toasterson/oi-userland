@@ -97,14 +97,12 @@ COMPONENT_POST_INSTALL_ACTION += $(RM) -r $(PROTO_DIR)/$(QT6_BASEDIR)/mkspecs/fe
 # Create symlinks with the -qt6 suffix in /usr/bin
 COMPONENT_POST_INSTALL_ACTION += \
 	for f in assistant designer lconvert linguist lrelease lupdate moc \
-	    pixeltool qdbus qdbuscpp2xml qdbusviewer qdbusviewer qdbusxml2cpp \
+	    pixeltool qdbus qdbuscpp2xml qdbusviewer qdbusxml2cpp \
 	    qhelpgenerator qmake qmlplugindump rcc uic ; do \
 		$(call create-symlinks,$(QT6_BINDIR)/$$f,$(USRBINDIR),-qt6) ; \
 	done ;
 
 PYTHON_SCRIPTS += $(QT6_BASEDIR)/mkspecs/features/uikit/devices.py
-PYTHON_SCRIPTS += $(QT6_BINDIR)/sanitizer-testrunner.py
-PYTHON_SCRIPTS += $(QT6_BINDIR)/qt-testrunner.py
 PYTHON_SCRIPTS += $(QT6_BINDIR)/qt-android-runner.py
 
 PKG_HARDLINKS += $(QT6_BINDIR:/%=%)/androiddeployqt
