@@ -1,0 +1,32 @@
+qt6: let CMake order XCB and EGLFS dependency lists on Solaris
+
+CMake's default preserves direct libraries, then repeats them after indirect
+users. REORDER_FREELY orders the dependency graph and removes duplicates without
+suppressing linker diagnostics or removing dependencies. Scope this to the XCB
+and EGLFS directories, on Solaris, with CMake 3.31 or newer.
+https://cmake.org/cmake/help/latest/prop_tgt/LINK_LIBRARIES_STRATEGY.html
+
+--- a/qtbase/src/plugins/platforms/xcb/CMakeLists.txt
++++ b/qtbase/src/plugins/platforms/xcb/CMakeLists.txt
+@@ -1,5 +1,9 @@
+ # Copyright (C) 2022 The Qt Company Ltd.
+ # SPDX-License-Identifier: BSD-3-Clause
++
++if(SOLARIS AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.31)
++    set(CMAKE_LINK_LIBRARIES_STRATEGY REORDER_FREELY)
++endif()
+ 
+ #####################################################################
+ ## XcbQpaPrivate Module:
+--- a/qtbase/src/plugins/platforms/eglfs/CMakeLists.txt
++++ b/qtbase/src/plugins/platforms/eglfs/CMakeLists.txt
+@@ -1,5 +1,9 @@
+ # Copyright (C) 2022 The Qt Company Ltd.
+ # SPDX-License-Identifier: BSD-3-Clause
++
++if(SOLARIS AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.31)
++    set(CMAKE_LINK_LIBRARIES_STRATEGY REORDER_FREELY)
++endif()
+ 
+ qt_find_package(EGL MODULE)
+ 
