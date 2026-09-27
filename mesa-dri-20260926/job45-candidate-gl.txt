@@ -1,0 +1,142 @@
+OIMESA-BEGIN
+illumos-7e3c88d1f3
+x11/library/libdrm                                2.4.109-2025.0.0.95        i--
+x11/library/mesa                                  21.3.9-2026.0.0.4          i--
+x11/server/xorg                                   1.19.7-2026.0.0.14         i--
+x11/server/xorg/driver/xorg-video-illumosfb       0.5-2026.0.0.0             i--
+total 89833
+2688810 -r-xr-xr-x 3 root bin 22179056 Sep 26 14:45 i915_dri.so
+  42068 -r-xr-xr-x 1 root bin 25450464 Sep 26 14:45 i965_dri.so
+2688810 -r-xr-xr-x 3 root bin 22179056 Sep 26 14:45 kms_swrast_dri.so
+2688810 -r-xr-xr-x 3 root bin 22179056 Sep 26 14:45 swrast_dri.so
+== ldd -r
+ok ldd /usr/lib/xorg/modules/dri/amd64/i915_dri.so
+ok ldd /usr/lib/xorg/modules/dri/amd64/i965_dri.so
+ok ldd /usr/lib/xorg/modules/dri/amd64/kms_swrast_dri.so
+ok ldd /usr/lib/xorg/modules/dri/amd64/swrast_dri.so
+ok ldd /usr/lib/mesa/amd64/libEGL.so.1.0.0
+ok ldd /usr/lib/mesa/amd64/libGL.so.1.2.0
+ok ldd /usr/lib/mesa/amd64/libGLESv1_CM.so.1.1.0
+ok ldd /usr/lib/mesa/amd64/libGLESv2.so.2.0.0
+ok ldd /usr/lib/mesa/amd64/libGLU.so.1.3.1
+ok ldd /usr/lib/mesa/amd64/libOSMesa.so.8.0.0
+ok ldd /usr/lib/mesa/amd64/libgbm.so.1.0.0
+ok ldd /usr/lib/mesa/amd64/libglapi.so.0.0.0
+ok ldd /usr/lib/mesa/amd64/libxatracker.so.2.5.0
+== harness: select illumosfb (package installs outside the default ModulePath)
+Section "Files"
+  ModulePath "/usr/lib/xorg/modules,/usr/lib/amd64/xorg/modules"
+EndSection
+Section "Device"
+  Identifier "Card0"
+  Driver "illumosfb"
+EndSection
+online         15:19:41 svc:/application/graphical-login/lightdm:default
+== Xorg :0
+        (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+[   404.048] (II) LoadModule: "illumosfb"
+[   404.052] (II) Loading /usr/lib/amd64/xorg/modules/drivers/illumosfb_drv.so
+[   404.053] (II) Module illumosfb: vendor="illumos"
+[   404.053] (II) illumosfb: driver for illumos framebuffer: illumosfb
+[   404.070] (WW) Falling back to old probe method for illumosfb
+[   404.071] (II) illumosfb(0): Visual identifier: "illumos_fb"
+[   404.071] (II) illumosfb(0): Framebuffer: 1024x768, 32 bpp, pitch 4096, size 3145728
+[   404.071] (II) illumosfb(0): Streaming stores: AVX2
+[   404.073] (II) illumosfb(0): Creating default Display subsection in Screen section
+[   404.074] (==) illumosfb(0): Depth 24, (==) framebuffer bpp 32
+[   404.074] (==) illumosfb(0): RGB weight 888
+[   404.074] (==) illumosfb(0): Default visual is TrueColor
+[   404.074] (==) illumosfb(0): Using gamma correction (1.0, 1.0, 1.0)
+[   404.074] (II) illumosfb(0): Using ShadowFB: Yes
+[   404.074] (==) illumosfb(0): DPI set to (96, 96)
+[   404.117] (==) illumosfb(0): Backing store enabled
+[   404.166] (II) AIGLX: Screen 0 is not DRI2 capable
+[   404.166] (EE) AIGLX: reverting to software rendering
+[   404.265] (II) IGLX: enabled GLX_MESA_copy_sub_buffer
+[   404.270] (II) IGLX: Loaded and initialized swrast
+[   404.270] (II) GLX: Initialized DRISWRAST GL provider for screen 0
+xauthority: /var/run/lightdm/root/:0
+libGL: glxext.c: __glxInitialize: dpyPriv->dri3Display = dri3_create_display
+libGL: screen 0 does not appear to be DRI2 capable
+libGL: MESA-LOADER: dlopen(/usr/lib/xorg/modules/dri/amd64/swrast_dri.so)
+libGL: Can't open configuration file /etc/drirc: No such file or directory.
+libGL: Can't open configuration file /root/.drirc: No such file or directory.
+libGL: Can't open configuration file /etc/drirc: No such file or directory.
+libGL: Can't open configuration file /root/.drirc: No such file or directory.
+name of display: :0
+display: :0  screen: 0
+direct rendering: Yes
+Extended renderer info (GLX_MESA_query_renderer):
+    Vendor: Mesa/X.org (0xffffffff)
+    Device: softpipe (0xffffffff)
+    Version: 21.3.9
+    Accelerated: no
+    Video memory: 3070MB
+    Unified memory: no
+    Preferred profile: core (0x1)
+    Max core profile version: 3.3
+    Max compat profile version: 3.3
+    Max GLES1 profile version: 1.1
+    Max GLES[23] profile version: 3.1
+OpenGL vendor string: Mesa/X.org
+OpenGL renderer string: softpipe
+OpenGL core profile version string: 3.3 (Core Profile) Mesa 21.3.9
+OpenGL core profile shading language version string: 3.30
+OpenGL core profile context flags: (none)
+OpenGL core profile profile mask: core profile
+
+OpenGL version string: 3.3 (Compatibility Profile) Mesa 21.3.9
+OpenGL shading language version string: 3.30
+OpenGL context flags: (none)
+OpenGL profile mask: compatibility profile
+
+OpenGL ES profile version string: OpenGL ES 3.1 Mesa 21.3.9
+OpenGL ES profile shading language version string: OpenGL ES GLSL ES 3.10
+
+OIMESA-DESKTOP-UP
+GL_RENDERER   = softpipe
+1254 frames in 5.0 seconds = 250.785 FPS
+1327 frames in 5.0 seconds = 265.342 FPS
+1309 frames in 5.0 seconds = 261.720 FPS
+1317 frames in 5.0 seconds = 263.166 FPS
+== Xvnc :1
+libGL: glxext.c: __glxInitialize: dpyPriv->dri3Display = dri3_create_display
+libGL: MESA-LOADER: dlopen(/usr/lib/xorg/modules/dri/amd64/swrast_dri.so)
+libGL: Can't open configuration file /etc/drirc: No such file or directory.
+libGL: Can't open configuration file /jack/.drirc: No such file or directory.
+libGL: Can't open configuration file /etc/drirc: No such file or directory.
+libGL: Can't open configuration file /jack/.drirc: No such file or directory.
+name of display: :1
+display: :1  screen: 0
+direct rendering: Yes
+Extended renderer info (GLX_MESA_query_renderer):
+    Vendor: Mesa/X.org (0xffffffff)
+    Device: softpipe (0xffffffff)
+    Version: 21.3.9
+    Accelerated: no
+    Video memory: 3070MB
+    Unified memory: no
+    Preferred profile: core (0x1)
+    Max core profile version: 3.3
+    Max compat profile version: 3.3
+    Max GLES1 profile version: 1.1
+    Max GLES[23] profile version: 3.1
+OpenGL vendor string: Mesa/X.org
+OpenGL renderer string: softpipe
+OpenGL core profile version string: 3.3 (Core Profile) Mesa 21.3.9
+OpenGL core profile shading language version string: 3.30
+OpenGL core profile context flags: (none)
+OpenGL core profile profile mask: core profile
+
+OpenGL version string: 3.3 (Compatibility Profile) Mesa 21.3.9
+OpenGL shading language version string: 3.30
+OpenGL context flags: (none)
+OpenGL profile mask: compatibility profile
+
+OpenGL ES profile version string: OpenGL ES 3.1 Mesa 21.3.9
+OpenGL ES profile shading language version string: OpenGL ES GLSL ES 3.10
+
+GL_RENDERER   = softpipe
+1327 frames in 5.0 seconds = 265.224 FPS
+1292 frames in 5.0 seconds = 258.222 FPS
+OIMESA-END
