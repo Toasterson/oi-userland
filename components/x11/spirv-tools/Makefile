@@ -35,6 +35,8 @@ CMAKE_OPTIONS += -DCMAKE_BUILD_TYPE=none
 CMAKE_OPTIONS += -DBUILD_SHARED_LIBS=ON
 CMAKE_OPTIONS += -DSPIRV_TOOLS_BUILD_STATIC=OFF
 CMAKE_OPTIONS += -DSPIRV-Headers_SOURCE_DIR=/usr
+# GCC 14 reports a false -Wstringop-overflow in source/opt (amd_ext_to_khr.cpp).
+CMAKE_OPTIONS += -DSPIRV_WERROR=OFF
 
 COMPONENT_TEST_TRANSFORMS += '-e "s/[0-9. ]*sec//g"'
 
