@@ -35,6 +35,8 @@ COMPONENT_PROJECT_URL = https://www.mesa3d.org/
 TEST_TARGET= $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
+PATCH_LEVEL= 0
+
 X11_SERVERMODS_DIR= /usr/lib/xorg/modules
 MESA_LIBDIR= /usr/lib/mesa/$(MACH64)
 MESA_DRIDIR= $(X11_SERVERMODS_DIR)/dri/$(MACH64)
