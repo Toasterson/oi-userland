@@ -87,7 +87,7 @@ CPPFLAGS += -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -Drestrict=__restrict
 LDFLAGS += -Wl,-znolazyload
 LDFLAGS += -Wl,-z,rescan-now
 CFLAGS += -Wstack-protector -fdata-sections -fstack-protector-all
-LD_OPTIONS += -z ignore -lssp
+LD_OPTIONS += -z ignore -lssp -lsocket -lnsl
 CONFIGURE_ENV += PYTHON=$(PYTHON)
 
 # libdrm is in /usr/lib/xorg, libLLVM in the clang prefix.

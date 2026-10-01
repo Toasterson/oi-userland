@@ -1,4 +1,4 @@
-ddebug: include c99_alloca.h for alloca() (illumos declares it in <alloca.h>).
+ddebug, anv: include c99_alloca.h for alloca() (illumos declares it in <alloca.h>).
 
 Upstreamable.
 
@@ -13,3 +13,14 @@ Upstreamable.
  
  #include "util/os_file.h"
  #include "util/u_dump.h"
+--- src/intel/vulkan/anv_sparse.c.orig
++++ src/intel/vulkan/anv_sparse.c
+@@ -22,6 +22,8 @@
+  */
+ 
+ #include <anv_private.h>
++
++#include "c99_alloca.h"
+ 
+ /* Sparse binding handling.
+  *
