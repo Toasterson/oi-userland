@@ -88,6 +88,8 @@ LDFLAGS += -Wl,-znolazyload
 LDFLAGS += -Wl,-z,rescan-now
 CFLAGS += -Wstack-protector -fdata-sections -fstack-protector-all
 LD_OPTIONS += -z ignore -lssp -lsocket -lnsl
+# libgallium needs libLLVM at link time of libGL, libEGL, libgbm and the GLES libraries.
+LD_OPTIONS += -R$(CLANG_LIBDIR)
 CONFIGURE_ENV += PYTHON=$(PYTHON)
 
 # libdrm is in /usr/lib/xorg, libLLVM in the clang prefix.
