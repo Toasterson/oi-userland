@@ -105,7 +105,16 @@ COMPONENT_POST_INSTALL_ACTION.64 += \
 REQUIRED_PACKAGES += x11/header/x11-protocols
 REQUIRED_PACKAGES += x11/library/libpthread-stubs
 REQUIRED_PACKAGES += system/header/header-drm
-REQUIRED_PACKAGES += library/graphics/libvdpau
+# mesa_clc (CLC for the iris and anv shaders) and the Vulkan BVH shaders,
+# used at build time only
+REQUIRED_PACKAGES += $(CLANG_DEVELOPER_PKG)
+REQUIRED_PACKAGES += developer/libclc-$(CLANG_VERSION)
+REQUIRED_PACKAGES += developer/spirv-llvm-translator-$(CLANG_VERSION)
+REQUIRED_PACKAGES += x11/library/glslang
+REQUIRED_PACKAGES += x11/library/spirv-tools
+REQUIRED_PACKAGES.python += library/python/mako
+REQUIRED_PACKAGES.python += library/python/packaging
+REQUIRED_PACKAGES.python += library/python/pyyaml
 
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)

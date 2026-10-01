@@ -1,8 +1,9 @@
 util: emulate futex_wait/futex_wake on illumos, which has no futex system call.
 
 anv's state pools call futex_wait/futex_wake directly.  The emulation is
-process-private (hashed mutex + condition variable buckets), which covers
-every Mesa user (anv, simple_mtx, util_queue fences).  Possibly upstreamable.
+process-private (hashed mutex + condition variable buckets, fork-safe),
+which covers every Mesa user (anv, simple_mtx, util_queue fences).
+Possibly upstreamable.
 
 --- src/util/futex.h.orig
 +++ src/util/futex.h
@@ -17,7 +18,7 @@ every Mesa user (anv, simple_mtx, util_queue fences).  Possibly upstreamable.
  #else
 --- src/util/futex.c.orig
 +++ src/util/futex.c
-@@ -114,6 +114,81 @@
+@@ -114,6 +114,105 @@
     return futex(addr, FUTEX_WAIT, value, &tsrel, NULL);
  }
  
@@ -48,6 +49,30 @@ every Mesa user (anv, simple_mtx, util_queue fences).  Possibly upstreamable.
 +futex_bucket(uint32_t *addr)
 +{
 +   return ((uintptr_t)addr >> 2) % FUTEX_BUCKETS;
++}
++
++/* A bucket lock is held only inside futex_wait/futex_wake, but a fork in
++ * another thread at that moment must not leave it locked in the child.
++ */
++static void
++futex_atfork_prepare(void)
++{
++   for (unsigned i = 0; i < FUTEX_BUCKETS; i++)
++      pthread_mutex_lock(&futex_buckets[i].mtx);
++}
++
++static void
++futex_atfork_release(void)
++{
++   for (unsigned i = FUTEX_BUCKETS; i-- > 0;)
++      pthread_mutex_unlock(&futex_buckets[i].mtx);
++}
++
++static void __attribute__((constructor))
++futex_atfork_init(void)
++{
++   pthread_atfork(futex_atfork_prepare, futex_atfork_release,
++                  futex_atfork_release);
 +}
 +
 +int futex_wake(uint32_t *addr, int32_t count)
