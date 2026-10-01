@@ -27,6 +27,9 @@ COMPONENT_CLASSIFICATION= System/X11
 COMPONENT_LICENSE=	Apache-2.0
 COMPONENT_LICENSE_FILE=	LICENSE
 
+# The libraries have unversioned sonames (libSPIRV-Tools.so): rebuild glslang
+# and mesa, which link them, with every update.
+
 include $(WS_MAKE_RULES)/common.mk
 
 CMAKE_OPTIONS += -DCMAKE_INSTALL_PREFIX=$(USRDIR)
