@@ -118,8 +118,10 @@ REQUIRED_PACKAGES.python += library/python/packaging
 REQUIRED_PACKAGES.python += library/python/pyyaml
 
 # Auto-generated dependencies
+REQUIRED_PACKAGES += $(CLANG_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += compress/zstd
 REQUIRED_PACKAGES += library/expat
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += service/opengl/ogl-select
@@ -131,8 +133,6 @@ REQUIRED_PACKAGES += x11/library/libdrm
 REQUIRED_PACKAGES += x11/library/libx11
 REQUIRED_PACKAGES += x11/library/libxcb
 REQUIRED_PACKAGES += x11/library/libxext
-REQUIRED_PACKAGES += x11/library/libxfixes
 REQUIRED_PACKAGES += x11/library/libxshmfence
-REQUIRED_PACKAGES += x11/library/libxv
-REQUIRED_PACKAGES += x11/library/libxvmc
 REQUIRED_PACKAGES += x11/library/libxxf86vm
+REQUIRED_PACKAGES += x11/library/xcb-util-keysyms

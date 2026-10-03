@@ -50,3 +50,4 @@ CMAKE_OPTIONS += -DLIBCLC_TARGETS_TO_BUILD="spirv-mesa3d-;spirv64-mesa3d-"
 # Build dependencies
 REQUIRED_PACKAGES += $(CLANG_DEVELOPER_PKG)
 REQUIRED_PACKAGES += developer/spirv-llvm-translator-$(CLANG_VERSION)
+# Auto-generated dependencies
