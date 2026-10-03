@@ -89,6 +89,10 @@ JPEG_PKG_CONFIG_PATH = $(JPEG_LIBDIR.$(BITS))/pkgconfig
 
 # Set standard explicitly
 CFLAGS   += -std=gnu99
+# GCC 14 makes these errors (common/rfb/pam.c, and the X server 1.19.7
+# sources as in its own component).
+CFLAGS   += -Wno-error=incompatible-pointer-types
+CFLAGS   += -Wno-error=implicit-function-declaration
 CXXFLAGS += -std=gnu++98
 
 COMPONENT_PRE_CMAKE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D))
