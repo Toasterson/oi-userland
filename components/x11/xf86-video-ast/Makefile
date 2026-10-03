@@ -19,6 +19,7 @@ include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME= xf86-video-ast
 COMPONENT_VERSION= 1.1.6
+COMPONENT_REVISION= 1
 COMPONENT_SUMMARY= xf86-video-ast - ASPEED AST driver for the Xorg X server
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-ast
 COMPONENT_ARCHIVE_EXTENSION= .tar.xz
