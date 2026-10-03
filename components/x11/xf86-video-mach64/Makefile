@@ -32,7 +32,7 @@ CFLAGS+= -D__EXTENSIONS__
 
 LD_OPTIONS+= \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
-        -lexa -lint10 -lpciaccess -lfb -lpixman-1 -lshadowfb -lvbe
+        -lexa -lint10 -lpciaccess -lpixman-1 -lshadowfb
 
 # - Disable DRI since the kernel module isn't ported
 CONFIGURE_OPTIONS += --disable-dri

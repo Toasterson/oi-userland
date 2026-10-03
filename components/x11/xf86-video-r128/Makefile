@@ -29,7 +29,7 @@ include $(WS_MAKE_RULES)/common.mk
 
 LD_OPTIONS = \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
-        -lint10 -lpciaccess -lfb -lpixman-1 -lvbe -lfbdevhw -lvgahw
+        -lint10 -lpciaccess -lpixman-1 -lfbdevhw -lvgahw
 
 # - Disable DRI since the kernel module isn't ported
 CONFIGURE_OPTIONS += --disable-dri

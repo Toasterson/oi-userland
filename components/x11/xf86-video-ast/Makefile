@@ -29,9 +29,9 @@ include $(WS_MAKE_RULES)/common.mk
 
 # Paths to find libraries/modules to link with 
 
-AST_LIBRARIES_i386 = -lint10 -lpciaccess -lvbe -lvgahw
+AST_LIBRARIES_i386 = -lint10 -lpciaccess -lvgahw
 
-AST_LIBRARIES = -lfb -lint10 -lpciaccess -lvbe -lvgahw
+AST_LIBRARIES = -lint10 -lpciaccess -lvgahw
 
 LD_OPTIONS+= -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
 	     $(AST_LIBRARIES)

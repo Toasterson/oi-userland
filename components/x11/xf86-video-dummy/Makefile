@@ -32,8 +32,7 @@ include $(WS_MAKE_RULES)/common.mk
 
 LD_OPTIONS= \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
-        -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR) \
-        -lfb
+        -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR)
 
 # Build dependencies
 REQUIRED_PACKAGES += x11/header/x11-protocols

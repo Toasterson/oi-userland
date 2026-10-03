@@ -30,7 +30,7 @@ include $(WS_MAKE_RULES)/common.mk
 LD_OPTIONS= -M$(COMPONENT_DIR)/mapfile.externs \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
         -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR) \
-        -lexa -lfb -lint10 -lpciaccess -lshadowfb -lXfont -lvbe -lvgahw -lm
+        -lexa -lint10 -lpciaccess -lshadowfb -lXfont -lvgahw -lm
 
 # - Disable DRI since the kernel module isn't ported
 CONFIGURE_OPTIONS += --disable-dri

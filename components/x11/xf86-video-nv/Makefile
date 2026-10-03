@@ -30,7 +30,7 @@ include $(WS_MAKE_RULES)/common.mk
 LD_OPTIONS= \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
         -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR) \
-        -lexa -lfb -lint10 -lshadowfb -lXfont -lvbe -lvgahw -lfbdevhw \
+        -lexa -lint10 -lshadowfb -lXfont -lvgahw -lfbdevhw \
 	-lpciaccess -lpixman-1 -lm
 
 # Build dependencies

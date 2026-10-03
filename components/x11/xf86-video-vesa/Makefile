@@ -29,7 +29,7 @@ include $(WS_MAKE_RULES)/common.mk
 
 LD_OPTIONS= \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
-        -lfb -lpciaccess -lshadow -lvbe
+        -lpciaccess -lshadow -lint10
 
 CONFIGURE_ENV += with_xorg_module_dir=/usr/lib/xorg/modules/drivers/$(MACH64)
 

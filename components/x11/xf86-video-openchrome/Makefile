@@ -37,7 +37,7 @@ openchrome_drv_la_LDFLAGS_add = \
         -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR) \
         -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR) \
         -Wl,-M$(COMPONENT_DIR)/mapfile.externs \
-        -lfb -lint10 -lpciaccess -lpixman-1 -lvbe \
+        -lint10 -lpciaccess -lpixman-1 \
         -lexa -lvgahw -lm -ldrm -lshadow
 
 COMPONENT_BUILD_ENV += \
