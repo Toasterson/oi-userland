@@ -20,7 +20,7 @@ include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME=         tigervnc
 COMPONENT_VERSION=      1.8.0
-COMPONENT_REVISION=     7
+COMPONENT_REVISION=     8
 COMPONENT_SUMMARY=      TigerVNC X11/VNC server
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
@@ -37,8 +37,18 @@ PATCH_PATTERN = [0-9][0-9]*.patch
 
 XORG_ADDITIONAL_PATCH_1 = $(PATCH_DIR)/tigervnc-screenlock.patch
 
+# Xvnc is built from the X server it was ported to: TigerVNC 1.8.0 supports
+# X servers up to 1.19 (unix/xserver119.patch). xserver119/ holds the
+# patches (except 29-glx-mesa) and extra sources that OpenIndiana used for
+# xorg-server 1.19.7, so Xvnc does not follow components/x11/xorg-server.
 XORG_SERVER_VERSION= 1.19.7
 XORG_SERVER_PATCH= xserver119.patch
+COMPONENT_SRC_1=		xorg-server-$(XORG_SERVER_VERSION)
+COMPONENT_ARCHIVE_1=		$(COMPONENT_SRC_1).tar.bz2
+COMPONENT_ARCHIVE_HASH_1=	\
+	sha256:7112f7128a4f5b06ceb8bba1bdc5e5c9e0fae682a42d35218bc12ba693f4c80c
+COMPONENT_ARCHIVE_URL_1=	$(XORG_XSERVER_BASE_URL)/$(COMPONENT_ARCHIVE_1)
+XORG_SERVER_PATCHES= $(sort $(wildcard $(COMPONENT_DIR)/xserver119/patches/*.patch))
 
 TEST_TARGET=	$(NO_TESTS)
 
@@ -51,19 +61,20 @@ PATH=$(GCC_ROOT)/bin:$(PATH.illumos)
 
 COMPONENT_POST_UNPACK_ACTION +=  ( cp -r $(COMPONENT_DIR)/srcs/* $(SOURCE_DIR) )
 
-$(SOURCE_DIR)/.prep: $(ARCHIVE_STAMPS) $(COMPONENT_DIR)/../xorg-server/xorg-server-$(XORG_SERVER_VERSION)/.prep
+$(SOURCE_DIR)/.prep: $(ARCHIVE_STAMPS)
 	$(COMPONENT_PREP_ACTION)
+	cp -r $(COMPONENT_DIR)/xserver119/srcs/* $(SOURCE_DIR_1)
+	for p in $(XORG_SERVER_PATCHES) ; do \
+		$(GPATCH) -d $(SOURCE_DIR_1) $(GPATCH_FLAGS) < $$p || exit 1 ; \
+	done
 	chmod -R u+w $(COMPONENT_SRC)/unix/xserver
-	cp -r $(COMPONENT_DIR)/../xorg-server/xorg-server-$(XORG_SERVER_VERSION)/* $(COMPONENT_SRC)/unix/xserver
+	cp -r $(SOURCE_DIR_1)/* $(COMPONENT_SRC)/unix/xserver
 	$(GPATCH) -d $(@D)/unix $(GPATCH_FLAGS) < $(SOURCE_DIR)/unix/$(XORG_SERVER_PATCH)
 	$(GPATCH) -d $(@D) $(GPATCH_FLAGS) <  $(XORG_ADDITIONAL_PATCH_1) 
 	( cd $(@D)/unix/xserver && \
 		autoreconf -fi -I m4)
 	$(TOUCH) $@
 
-
-$(COMPONENT_DIR)/../xorg-server/xorg-server-$(XORG_SERVER_VERSION)/.prep:
-	$(GMAKE) -C $(COMPONENT_DIR)/../xorg-server prep
 
 # Build with the distribution preferred libjpeg implementation
 CFLAGS   += $(JPEG_CPPFLAGS) $(JPEG_CFLAGS)
@@ -98,7 +109,6 @@ CPPFLAGS += $(CPP_LARGEFILES)
 CPPFLAGS += -DSUNSOFT -DTSOL
 CPPFLAGS += -I/usr/include/pixman-1
 CPPFLAGS += -I/usr/include/mesa
-CPPFLAGS += -I/usr/include/xorg
 
 # Required for linking to libXfont2
 LDFLAGS+= -L$(X11_SERVERLIBS_DIR) -R$(X11_SERVERLIBS_DIR) 
@@ -200,7 +210,6 @@ install: $(INSTALL_64) $(BUILD_DIR)/.installed_jar $(BUILD_DIR)/.installed_Xvnc
 
 # Build dependencies
 REQUIRED_PACKAGES += text/xmlto
-REQUIRED_PACKAGES += x11/server/xorg
 
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
