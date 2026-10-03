@@ -109,7 +109,6 @@ CONFIGURE_OPTIONS += --with-default-font-path='catalogue:/etc/X11/fontpath.d'
 CONFIGURE_OPTIONS += --with-default-xkb-model=pc105
 CONFIGURE_OPTIONS += --with-log-dir=/var/log
 CONFIGURE_OPTIONS += --with-module-dir=$(X11_SERVERMODS_DIR)
-CONFIGURE_OPTIONS += --with-os-name="`uname -srm`"
 CONFIGURE_OPTIONS += --with-vendor-name="Project OpenIndiana"
 CONFIGURE_OPTIONS += --with-vendor-web="http://openindiana.org"
 CONFIGURE_OPTIONS += --with-xkb-output=/var/run/xkb

@@ -1,22 +1,8 @@
 Solaris port fixes: sdksyms.sh tolerates cpp spacing in visibility
 attributes (as in Oracle solaris-userland 30-solaris-port.patch), the
-modesetting driver links the Xorg externs mapfile, libfb and libshadow,
-and XYToWindow is exported for modules.
+modesetting driver links the Xorg externs mapfile and libshadow, and
+XYToWindow is exported for modules.
 
-diff --git a/hw/xfree86/drivers/modesetting/Makefile.am b/hw/xfree86/drivers/modesetting/Makefile.am
-index 961c574..1765203 100644
---- a/hw/xfree86/drivers/modesetting/Makefile.am
-+++ b/hw/xfree86/drivers/modesetting/Makefile.am
-@@ -41,7 +41,8 @@ AM_CPPFLAGS = \
- 
- modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
- modesetting_drv_la_LDFLAGS = -module -avoid-version
--modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
-+modesetting_drv_la_LDFLAGS += $(XORG_EXTERNS_FLAG)
-+modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(LIBDRM_LIBS) $(top_builddir)/fb/libfb.la $(top_builddir)/miext/shadow/libshadow.la
- modesetting_drv_ladir = @moduledir@/drivers
- 
- modesetting_drv_la_SOURCES = \
 diff --git a/hw/xfree86/sdksyms.sh b/hw/xfree86/sdksyms.sh
 index 5fd5b5c..bed6b7d 100755
 --- a/hw/xfree86/sdksyms.sh
@@ -36,6 +22,20 @@ index 5fd5b5c..bed6b7d 100755
  function basename(file) {
      sub(".*/", "", file)
      return file
+diff --git a/hw/xfree86/drivers/modesetting/Makefile.am b/hw/xfree86/drivers/modesetting/Makefile.am
+index 961c574..99d9440 100644
+--- a/hw/xfree86/drivers/modesetting/Makefile.am
++++ b/hw/xfree86/drivers/modesetting/Makefile.am
+@@ -41,7 +41,8 @@ AM_CPPFLAGS = \
+ 
+ modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
+ modesetting_drv_la_LDFLAGS = -module -avoid-version
+-modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
++modesetting_drv_la_LDFLAGS += $(XORG_EXTERNS_FLAG)
++modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(LIBDRM_LIBS) $(top_builddir)/miext/shadow/libshadow.la
+ modesetting_drv_ladir = @moduledir@/drivers
+ 
+ modesetting_drv_la_SOURCES = \
 diff --git a/include/input.h b/include/input.h
 index cdb5d5a..ea8daf2 100644
 --- a/include/input.h
