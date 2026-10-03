@@ -28,6 +28,10 @@ COMPONENT_ARCHIVE_HASH= \
 
 include $(WS_MAKE_RULES)/common.mk
 
+# autoconf 2.72+ selects -std=gnu23, where the driver's unprototyped
+# function pointers (Bool (*)()) no longer match the server's types.
+CONFIGURE_ENV += ac_cv_prog_cc_c23=no
+
 # Paths to find libraries/modules to link with 
 
 LD_OPTIONS= \

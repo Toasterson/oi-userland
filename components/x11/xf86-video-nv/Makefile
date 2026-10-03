@@ -18,11 +18,10 @@ include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME= xf86-video-nv
-COMPONENT_VERSION= 2.1.22
-COMPONENT_REVISION= 1
+COMPONENT_VERSION= 2.1.24
 COMPONENT_SUMMARY= xf86-video-nv - NVIDIA video driver for the Xorg X server
 COMPONENT_ARCHIVE_EXTENSION= .tar.xz
-COMPONENT_ARCHIVE_HASH= sha256:6218932db5c389878d853b11b8fbb667c321b65276f55aa6842a56fb1a30d288
+COMPONENT_ARCHIVE_HASH= sha256:2fb667de9d10bfa7ecddbb951f93020a2c0e42757b000a3d6f400bd54845df23
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-nv
 
 include $(WS_MAKE_RULES)/common.mk

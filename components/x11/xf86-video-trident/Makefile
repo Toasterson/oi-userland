@@ -18,12 +18,12 @@ include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME= xf86-video-trident
-COMPONENT_VERSION= 1.3.8
-COMPONENT_REVISION= 5
+COMPONENT_VERSION= 1.4.0
+COMPONENT_ARCHIVE_EXTENSION= .tar.xz
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-trident
 COMPONENT_SUMMARY= xf86-video-trident - Trident video driver for the Xorg X server
 COMPONENT_ARCHIVE_HASH= \
-  sha256:9e5119d974c3e2221994542d35e3a0b3426a441869ddd6dd08a84f324856ac3f
+	sha256:7f76219ca7d7dc6061aa3c2aa59bc2a63895b8e6217e413ce315949f57b0189b
 
 include $(WS_MAKE_RULES)/common.mk
 

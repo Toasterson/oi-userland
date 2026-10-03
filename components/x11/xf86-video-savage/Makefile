@@ -18,12 +18,12 @@ include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME= xf86-video-savage
-COMPONENT_VERSION= 2.3.9
-COMPONENT_REVISION= 6
+COMPONENT_VERSION= 2.4.1
+COMPONENT_ARCHIVE_EXTENSION= .tar.xz
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-savage
 COMPONENT_SUMMARY= xf86-video-savage - S3 Savage video driver for the Xorg X server
 COMPONENT_ARCHIVE_HASH= \
-  sha256:2c93c4db1f71e725dda0caee5821253129d4b52d7aa0fd720593e7769bceec86
+	sha256:674191160c61982199c582233c5f1df5163a09f3ecbcb3d5bb5079b31a7d10af
 
 include $(WS_MAKE_RULES)/common.mk
 

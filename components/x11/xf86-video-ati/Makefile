@@ -28,6 +28,10 @@ COMPONENT_ARCHIVE_HASH= \
 CONFIGURE_DEFAULT_DIRS = no
 include $(WS_MAKE_RULES)/common.mk
 
+# GCC 14 makes this an error; radeon.h declares R600LoadShaders() only with
+# USE_EXA, while radeon_driver.c calls it for DRI on R600 and later.
+CFLAGS += -Wno-error=implicit-function-declaration
+
 COMPONENT_PREP_ACTION = \
  ( cd $(@D) && \
     aclocal -I. && \

@@ -18,12 +18,12 @@ include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
 COMPONENT_NAME= xf86-video-r128
-COMPONENT_VERSION= 6.10.2
-COMPONENT_REVISION= 6
+COMPONENT_VERSION= 6.13.0
+COMPONENT_ARCHIVE_EXTENSION= .tar.xz
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-r128
 COMPONENT_SUMMARY= xf86-video-r128 - ATI Rage 128 video driver for the Xorg X server
 COMPONENT_ARCHIVE_HASH= \
-  sha256:84da21517f3af7617fdf341e84ccb22444d6cdab1647e4808fa631528b9a77de
+	sha256:f20bed5ac201edd517fe0878dd2bcef78c8805c9f7faa3d0d7a4dba2e973f745
 
 include $(WS_MAKE_RULES)/common.mk
 

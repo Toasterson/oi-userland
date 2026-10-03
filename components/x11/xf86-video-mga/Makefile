@@ -27,6 +27,10 @@ COMPONENT_ARCHIVE_HASH= \
 
 include $(WS_MAKE_RULES)/common.mk
 
+# GCC 14 makes these errors; the driver passes e.g. unsigned char ** for
+# void ** to pci_device_map_range().
+CFLAGS += -Wno-error=incompatible-pointer-types
+
 # Extra flags to link mga_drv.so, but not util/stormdwg binary with
 DRIVER_LD_FLAGS = -L$(X11_SERVERMODS_DIR) -R$(X11_SERVERMODS_DIR)
 
