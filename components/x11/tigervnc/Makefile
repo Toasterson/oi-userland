@@ -224,6 +224,13 @@ install: $(INSTALL_64) $(BUILD_DIR)/.installed_jar $(BUILD_DIR)/.installed_Xvnc
 
 # Build dependencies
 REQUIRED_PACKAGES += text/xmlto
+# Xvnc, built from the X server sources in xserver119/
+REQUIRED_PACKAGES += developer/build/autoconf/xorg-macros
+REQUIRED_PACKAGES += x11/font-util
+REQUIRED_PACKAGES += x11/header/x11-protocols
+REQUIRED_PACKAGES += x11/library/libxkbfile
+REQUIRED_PACKAGES += x11/library/mesa
+REQUIRED_PACKAGES += x11/library/xtrans
 
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
