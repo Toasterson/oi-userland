@@ -31,9 +31,11 @@ include $(WS_MAKE_RULES)/common.mk
 # GCC 14 makes these errors: radeon.h declares R600LoadShaders() only with
 # USE_EXA, while radeon_driver.c calls it for DRI on R600 and later, and the
 # EMIT_* macros call exaGetPixmapDriverPrivate() undeclared in the command
-# submission (KMS) paths, which this build (--disable-kms) never takes.
+# submission (KMS) paths, which this build (--disable-kms) never takes;
+# radeon_modes.c passes const char ** (the server's mode list) as char **.
 CFLAGS += -Wno-error=implicit-function-declaration
 CFLAGS += -Wno-error=int-conversion
+CFLAGS += -Wno-error=incompatible-pointer-types
 
 COMPONENT_PREP_ACTION = \
  ( cd $(@D) && \
