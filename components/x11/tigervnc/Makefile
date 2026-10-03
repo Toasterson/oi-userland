@@ -136,6 +136,7 @@ XVNC_CONFIGURE_SCRIPT=	$(BUILD_DIR_64)/unix/xserver/configure
 XVNC_CONFIGURE_OPTIONS += --bindir=$(USRBINDIR)
 XVNC_CONFIGURE_OPTIONS += --disable-builddocs
 XVNC_CONFIGURE_OPTIONS += --disable-config-hal
+XVNC_CONFIGURE_OPTIONS += --disable-dependency-tracking
 XVNC_CONFIGURE_OPTIONS += --disable-dga
 XVNC_CONFIGURE_OPTIONS += --disable-dmx
 XVNC_CONFIGURE_OPTIONS += --disable-dri3
