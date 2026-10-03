@@ -22,7 +22,8 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-file path=usr/clang/$(CLANGVER)/bin/llvm-spirv
+# libLLVM is in /usr/clang/$(CLANGVER)/lib, which holds only 64-bit objects
+file path=usr/clang/$(CLANGVER)/bin/llvm-spirv pkg.linted.userland.action001.3=true
 file path=usr/clang/$(CLANGVER)/include/LLVMSPIRVLib/LLVMSPIRVExtensions.inc
 file path=usr/clang/$(CLANGVER)/include/LLVMSPIRVLib/LLVMSPIRVLib.h
 file path=usr/clang/$(CLANGVER)/include/LLVMSPIRVLib/LLVMSPIRVOpts.h
