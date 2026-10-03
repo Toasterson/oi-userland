@@ -15,6 +15,10 @@
 
 BUILD_STYLE= cmake
 
+# The Java viewer uses javax.xml.bind and the Windows look and feel
+# classes, which JDK 11 and later no longer have.
+JAVA_VERSION = 8
+
 include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/x11.mk
 
