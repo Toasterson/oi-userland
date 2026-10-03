@@ -99,6 +99,7 @@ COMPONENT_POST_INSTALL_ACTION.64 += \
 	    -type f -name '*.so*'); do \
 		$(ELFEDIT) -e 'dyn:runpath $(MESA_RUNPATH)' $$f || exit 1; \
 	done ; \
+	$(RM) -r $(PROTOUSRDIR)/include/mesa ; \
 	$(MV) $(PROTOUSRDIR)/include/GL $(PROTOUSRDIR)/include/mesa
 
 # Manually added build dependencies
