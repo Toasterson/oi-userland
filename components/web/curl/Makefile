@@ -28,6 +28,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         curl
 COMPONENT_VERSION=      8.22.0
+COMPONENT_REVISION=     1
 COMPONENT_SUMMARY=      The CURL Network Utility and Library
 COMPONENT_DESCRIPTION=	A command-line tool and library for transforming data with URL syntax
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -80,7 +81,9 @@ CONFIGURE_OPTIONS += --disable-sspi --enable-crypto-auth
 CONFIGURE_OPTIONS += --enable-cookies --disable-hidden-symbols
 CONFIGURE_OPTIONS += --disable-soname-bump
 CONFIGURE_OPTIONS += --enable-ldap --with-random=/dev/urandom
-CONFIGURE_OPTIONS += --enable-ares
+# Use the system name service switch (including NIS) without blocking transfers.
+CONFIGURE_OPTIONS += --disable-ares
+CONFIGURE_OPTIONS += --enable-threaded-resolver
 CONFIGURE_OPTIONS += --enable-websockets
 CONFIGURE_OPTIONS += --with-openssl=$(OPENSSL_PREFIX)
 CONFIGURE_OPTIONS += --with-ldap-lib=ldap_r-2.4
@@ -116,7 +119,6 @@ COMPONENT_TEST_TRANSFORMS += \
 REQUIRED_PACKAGES += $(OPENSSL_PKG)
 REQUIRED_PACKAGES += compress/zstd
 REQUIRED_PACKAGES += library/brotli
-REQUIRED_PACKAGES += library/libcares
 REQUIRED_PACKAGES += library/libidn2
 REQUIRED_PACKAGES += library/libpsl
 REQUIRED_PACKAGES += library/libssh2
