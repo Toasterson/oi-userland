@@ -210,12 +210,6 @@
      drmmode_bo front_bo;
 --- a/hw/xfree86/drivers/modesetting/Makefile.am
 +++ b/hw/xfree86/drivers/modesetting/Makefile.am
-@@ -41,7 +41,7 @@
- 
- modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
- modesetting_drv_la_LDFLAGS = -module -avoid-version
--modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
-+modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) -lsysevent -lnvpair
- modesetting_drv_ladir = @moduledir@/drivers
- 
- modesetting_drv_la_SOURCES = \
+@@ -45 +45 @@
+-modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(LIBDRM_LIBS)
++modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(LIBDRM_LIBS) -lsysevent -lnvpair
