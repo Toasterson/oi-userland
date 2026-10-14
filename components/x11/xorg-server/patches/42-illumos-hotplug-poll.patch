@@ -1,0 +1,220 @@
+--- a/hw/xfree86/drivers/modesetting/drmmode_display.c
++++ b/hw/xfree86/drivers/modesetting/drmmode_display.c
+@@ -4272,11 +4272,161 @@
+ }
+ #endif
+ 
++#ifdef __sun
++/* A bounded polling cycle: one resource list and at most eight connector
++ * ioctls per timer callback, at most 128 connectors in a snapshot. These
++ * bounds limit work issued, not the kernel's execution time for one ioctl. */
++#define MS_POLL_MAX_CONNECTORS 128
++struct drmmode_poll {
++    drmmode_ptr drmmode;
++    OsTimerPtr timer;
++    uint32_t ids[MS_POLL_MAX_CONNECTORS];
++    unsigned count, pos;
++    uint64_t hash, previous;
++    CARD32 interval;
++    Bool valid, scanning, external;
++};
++
++static uint64_t
++poll_hash(uint64_t hash, uint32_t value)
++{
++    return (hash ^ value) * UINT64_C(1099511628211);
++}
++
++static int
++poll_id_compare(const void *a, const void *b)
++{
++    uint32_t x = *(const uint32_t *)a, y = *(const uint32_t *)b;
++    return (x > y) - (x < y);
++}
++
++static CARD32
++drmmode_poll_tick(OsTimerPtr timer, CARD32 now, void *closure)
++{
++    struct drmmode_poll *p = closure;
++    drmmode_ptr drmmode = p->drmmode;
++    drmModeResPtr resources;
++    unsigned budget = 4, i;
++
++    if (!drmmode->scrn->vtSema) {
++        p->scanning = FALSE;
++        p->valid = FALSE;
++        return 5000;
++    }
++    if (!p->scanning) {
++        resources = drmModeGetResources(drmmode->fd);
++        if (!resources)
++            goto backoff;
++        if (resources->count_connectors < 0 ||
++            resources->count_connectors > MS_POLL_MAX_CONNECTORS) {
++            drmModeFreeResources(resources);
++            goto backoff;
++        }
++        p->count = resources->count_connectors;
++        for (i = 0; i < p->count; i++)
++            p->ids[i] = resources->connectors[i];
++        drmModeFreeResources(resources);
++        qsort(p->ids, p->count, sizeof(p->ids[0]), poll_id_compare);
++        p->pos = 0;
++        p->hash = poll_hash(UINT64_C(14695981039346656037), p->count);
++        /* An empty topology may acquire an MST connector later. */
++        p->external = p->count == 0;
++        p->scanning = TRUE;
++    }
++    while (p->pos < p->count && budget--) {
++        drmModeConnectorPtr c;
++        uint32_t id = p->ids[p->pos++];
++        /* Current avoids forcing a panel probe just to find its type. */
++        c = drmModeGetConnectorCurrent(drmmode->fd, id);
++        if (!c)
++            goto backoff; /* An MST snapshot raced removal; retry later. */
++        p->hash = poll_hash(p->hash, id);
++        if (c->connector_type == DRM_MODE_CONNECTOR_LVDS ||
++            c->connector_type == DRM_MODE_CONNECTOR_eDP ||
++            c->connector_type == DRM_MODE_CONNECTOR_DSI) {
++            drmModeFreeConnector(c);
++            continue;
++        }
++        p->external = TRUE;
++        drmModeFreeConnector(c);
++        c = drmModeGetConnector(drmmode->fd, id);
++        if (!c)
++            goto backoff;
++        p->hash = poll_hash(p->hash, c->connection);
++        p->hash = poll_hash(p->hash, c->count_modes);
++        for (i = 0; i < c->count_modes; i++) {
++            p->hash = poll_hash(p->hash, c->modes[i].clock);
++            p->hash = poll_hash(p->hash, c->modes[i].hdisplay);
++            p->hash = poll_hash(p->hash, c->modes[i].vdisplay);
++            p->hash = poll_hash(p->hash, c->modes[i].htotal);
++            p->hash = poll_hash(p->hash, c->modes[i].vtotal);
++            p->hash = poll_hash(p->hash, c->modes[i].flags);
++        }
++        /* Includes EDID blob ID and link-status, without fetching blobs. */
++        for (i = 0; i < c->count_props; i++) {
++            p->hash = poll_hash(p->hash, c->props[i]);
++            p->hash = poll_hash(p->hash, c->prop_values[i]);
++            p->hash = poll_hash(p->hash, c->prop_values[i] >> 32);
++        }
++        drmModeFreeConnector(c);
++    }
++    if (p->pos < p->count)
++        return 250;
++    p->scanning = FALSE;
++    if (!p->valid || p->hash != p->previous)
++        drmmode_update_kms_state(drmmode);
++    p->previous = p->hash;
++    p->valid = TRUE;
++    p->interval = drmmode->sysevent ? 5000 : 3000;
++    /* Fixed panels alone cannot hotplug. Retain only a slow resource check
++     * for topology changes; no forced panel probing or full RandR walk. */
++    return p->external ? p->interval : 30000;
++backoff:
++    p->scanning = FALSE;
++    p->interval = p->interval < 15000 ? p->interval * 2 : 30000;
++    return p->interval;
++}
++
++static void
++drmmode_poll_init(drmmode_ptr drmmode)
++{
++    struct drmmode_poll *p;
++    if (!xf86ReturnOptValBool(drmmode->Options, OPTION_HOTPLUG_POLL, TRUE))
++        return;
++    p = calloc(1, sizeof(*p));
++    if (!p)
++        return;
++    p->drmmode = drmmode;
++    p->interval = drmmode->sysevent ? 5000 : 3000;
++    p->timer = TimerSet(NULL, 0, p->interval, drmmode_poll_tick, p);
++    if (!p->timer) {
++        free(p);
++        return;
++    }
++    drmmode->hotplug_poll = p;
++    xf86DrvMsg(drmmode->scrn->scrnIndex, X_INFO,
++               "bounded connector polling enabled (%u ms; HotplugPoll disables)\n",
++               p->interval);
++}
++
++static void
++drmmode_poll_fini(drmmode_ptr drmmode)
++{
++    struct drmmode_poll *p = drmmode->hotplug_poll;
++    if (!p)
++        return;
++    TimerFree(p->timer);
++    drmmode->hotplug_poll = NULL;
++    free(p);
++}
++#endif
++
+ void
+ drmmode_uevent_init(ScrnInfoPtr scrn, drmmode_ptr drmmode)
+ {
+ #ifdef __sun
+     drmmode_sysevent_init(drmmode);
++    drmmode_poll_init(drmmode);
+ #endif
+ #ifdef CONFIG_UDEV_KMS
+     struct udev *u;
+@@ -4312,6 +4462,7 @@
+ drmmode_uevent_fini(ScrnInfoPtr scrn, drmmode_ptr drmmode)
+ {
+ #ifdef __sun
++    drmmode_poll_fini(drmmode);
+     drmmode_sysevent_fini(drmmode);
+ #endif
+ #ifdef CONFIG_UDEV_KMS
+--- a/hw/xfree86/drivers/modesetting/drmmode_display.h
++++ b/hw/xfree86/drivers/modesetting/drmmode_display.h
+@@ -101,6 +101,7 @@
+ #endif
+ #ifdef __sun
+     struct drmmode_sysevent *sysevent;
++    struct drmmode_poll *hotplug_poll;
+ #endif
+     drmEventContext event_context;
+     drmmode_bo front_bo;
+--- a/hw/xfree86/drivers/modesetting/driver.h
++++ b/hw/xfree86/drivers/modesetting/driver.h
+@@ -61,6 +61,7 @@
+     OPTION_VARIABLE_REFRESH,
+     OPTION_USE_GAMMA_LUT,
+     OPTION_ASYNC_FLIP_SECONDARIES,
++    OPTION_HOTPLUG_POLL,
+ } modesettingOpts;
+ 
+ typedef struct
+--- a/hw/xfree86/drivers/modesetting/driver.c
++++ b/hw/xfree86/drivers/modesetting/driver.c
+@@ -134,6 +134,7 @@
+ };
+ 
+ static const OptionInfoRec Options[] = {
++    {OPTION_HOTPLUG_POLL, "HotplugPoll", OPTV_BOOLEAN, {0}, FALSE},
+     {OPTION_SW_CURSOR, "SWcursor", OPTV_BOOLEAN, {0}, FALSE},
+     {OPTION_DEVICE_PATH, "kmsdev", OPTV_STRING, {0}, FALSE},
+     {OPTION_SHADOW_FB, "ShadowFB", OPTV_BOOLEAN, {0}, FALSE},
+--- a/hw/xfree86/drivers/modesetting/modesetting.man
++++ b/hw/xfree86/drivers/modesetting/modesetting.man
+@@ -109,6 +109,15 @@
+ entries, if supported by the kernel. By default, GAMMA_LUT will be used for
+ kms drivers which are known to be safe for use of GAMMA_LUT.
+ .TP
++On illumos, Option "HotplugPoll" "false" disables the bounded connector-status
++polling fallback. By default external outputs are checked every three seconds,
++or five seconds when the DRM sysevent subscription is available. Failed queries
++back off to thirty seconds. Fixed panels are not forcibly probed. Resource
++snapshots are limited to 128 connectors, with four connectors per timer batch.
++A single kernel ioctl cannot be preempted by this userspace budget.
++Polling pauses while the screen does not own the VT. Sysevent notifications
++remain enabled independently; both paths reconcile dynamic MST connectors.
++.PP
+ .SH "SEE ALSO"
+ @xservername@(@appmansuffix@), @xconfigfile@(@filemansuffix@), Xserver(@appmansuffix@),
+ X(@miscmansuffix@)
