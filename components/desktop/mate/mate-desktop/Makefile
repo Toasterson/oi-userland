@@ -24,9 +24,11 @@ include $(WS_MAKE_RULES)/mate.mk
 COMPONENT_NAME=		mate-desktop
 COMPONENT_MJR_VERSION=	1.28
 COMPONENT_MNR_VERSION=	2
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	2
 COMPONENT_SUMMARY=	Additional UI API for MATE Desktop
 COMPONENT_ARCHIVE_HASH= sha256:32bb4b792014b391c1e1b8ae9c18a82b4d447650984b4cba7d28e95564964aa2
+# RandR event updates use cached X server state. Do not drop those updates:
+# desktop policy debounces decisions without keeping stale CRTC/monitor data.
 COMPONENT_LICENSE=	GPLv2, LGPLv2, FDLv1.1
 
 include $(WS_MAKE_RULES)/common.mk
