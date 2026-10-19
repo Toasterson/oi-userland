@@ -11,7 +11,7 @@ claims conflict before PreInit. This patch is specific to illumos.
 
 --- a/hw/xfree86/common/xf86AutoConfig.c
 +++ b/hw/xfree86/common/xf86AutoConfig.c
-@@ -224,6 +224,110 @@
+@@ -224,11 +224,121 @@
      return ret == CONFIG_OK;
  }
 
@@ -122,19 +122,18 @@ claims conflict before PreInit. This patch is specific to illumos.
  static void
  listPossibleVideoDrivers(XF86MatchedDrivers *md)
  {
-@@ -290,12 +394,36 @@
-     if (sbusDriver)
-         xf86AddMatchedDriver(md, sbusDriver);
- #endif
+     md->nmatches = 0;
+
 +#if defined(__sun) && (defined(__i386__) || defined(__amd64__))
 +    if (sunKmsDevice()) {
 +        xf86AddMatchedDriver(md, "modesetting");
 +        return;
 +    }
 +#endif
- #ifdef XSERVER_LIBPCIACCESS
-     xf86PciMatchDriver(md);
+ #ifdef XSERVER_PLATFORM_BUS
+     xf86PlatformMatchDriver(md);
  #endif
+@@ -296,6 +406,24 @@
 
  #if defined(__linux__)
      xf86AddMatchedDriver(md, "modesetting");
