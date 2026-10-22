@@ -1,0 +1,11 @@
+--- php-8.5.12/TSRM/TSRM.h
++++ php-8.5.12/TSRM/TSRM.h.new
+@@ -153,7 +153,7 @@
+ #endif
+
+ #if !__has_attribute(tls_model) || defined(__FreeBSD__) || defined(__NetBSD__) \
+-	|| defined(__MUSL__) || defined(__HAIKU__) || defined(_AIX)
++	|| defined(__MUSL__) || defined(__HAIKU__) || defined(_AIX) || defined(__sun)
+ # define TSRM_TLS_MODEL_ATTR
+ # define TSRM_TLS_MODEL_DEFAULT
+ #elif __PIC__
